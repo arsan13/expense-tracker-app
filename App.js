@@ -1,8 +1,8 @@
 import React from 'react';
-import HelloWorld from './src/screens/HelloWorld';
+import Index from './src/Index';
 
 const App = () => {
-  return <HelloWorld />;
+  return <Index />;
 };
 
 export default App;
