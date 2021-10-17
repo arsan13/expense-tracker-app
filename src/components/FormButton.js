@@ -1,7 +1,7 @@
 import React from 'react';
 import {Text, TouchableOpacity, StyleSheet} from 'react-native';
 import {windowHeight, windowWidth} from '../utils/Dimentions';
-import {primary} from '../utils/GlobalStyle';
+import {primaryColor} from '../utils/GlobalStyle';
 
 const FormButton = ({buttonTitle, ...rest}) => {
   return (
@@ -18,7 +18,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
     width: '100%',
     height: windowHeight / 15,
-    backgroundColor: primary,
+    backgroundColor: primaryColor,
     padding: 10,
     alignItems: 'center',
     justifyContent: 'center',

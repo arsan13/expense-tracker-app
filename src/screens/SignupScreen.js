@@ -1,8 +1,17 @@
 import React, {useState} from 'react';
-import {View, Text, TouchableOpacity, StyleSheet} from 'react-native';
+import {
+  View,
+  ScrollView,
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+  ActivityIndicator,
+} from 'react-native';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 import FormInput from '../components/FormInput';
 import FormButton from '../components/FormButton';
-import {primary} from '../utils/GlobalStyle';
+import {primaryColor, globalStyle} from '../utils/GlobalStyle';
+import {postService} from '../utils/Api';
 
 const SignupScreen = ({navigation}) => {
   const initialState = {
@@ -10,75 +19,138 @@ const SignupScreen = ({navigation}) => {
     lastName: '',
     email: '',
     password: '',
+    confirmPassword: '',
   };
   const [data, setData] = useState(initialState);
+  const [errMsg, setErrMsg] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleChange = (key, value) => {
     setData({...data, [key]: value});
   };
 
-  const handleSubmit = () => {
-    console.log(data);
-    setData(initialState);
-    navigation.goBack();
+  const handleSubmit = async () => {
+    setIsLoading(true);
+
+    // Validation
+    if (validate() === false) {
+      setIsLoading(false);
+      return;
+    }
+
+    delete data.confirmPassword;
+
+    const res = await postService('register', '', data);
+    if (res !== null) {
+      setData(initialState);
+      setIsLoading(false);
+      navigation.goBack();
+    } else {
+      setErrMsg('Error signing up...Try again');
+      setIsLoading(false);
+    }
+  };
+
+  const validate = () => {
+    if (
+      data.firstName.trim().length === 0 ||
+      data.lastName.trim().length === 0 ||
+      data.email.trim().length === 0
+    ) {
+      setErrMsg('All the fields are mandatory');
+      return false;
+    }
+
+    //Email
+    let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w\w+)+$/;
+    if (reg.test(data.email) === false) {
+      setErrMsg('Incorrect email address');
+      return false;
+    }
+
+    if (data.password.length < 6) {
+      setErrMsg('Password must be of atleast 6 characters');
+      return false;
+    }
+    if (data.password !== data.confirmPassword) {
+      setErrMsg('Passwords must match');
+      return false;
+    }
+
+    return true;
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.text}>Create an account</Text>
+    <>
+      {isLoading ? (
+        <View style={styles.container}>
+          <ActivityIndicator size="large" color={primaryColor} />
+        </View>
+      ) : (
+        <ScrollView contentContainerStyle={styles.container}>
+          <View style={styles.header}>
+            <AntDesign name="adduser" size={25} color={primaryColor} />
+            <Text style={styles.text}>Create an account</Text>
+          </View>
 
-      <FormInput
-        // labelValue={firstName}
-        onChangeText={text => handleChange('firstName', text)}
-        placeholderText="First Name"
-        iconType="form"
-        autoCapitalize="none"
-        autoCorrect={false}
-      />
+          <FormInput
+            // labelValue={firstName}
+            onChangeText={text => handleChange('firstName', text)}
+            placeholderText="First Name"
+            iconType="form"
+            autoCapitalize="none"
+            autoCorrect={false}
+          />
 
-      <FormInput
-        // labelValue={lastName}
-        onChangeText={text => handleChange('lastName', text)}
-        placeholderText="lastName"
-        iconType="form"
-        autoCapitalize="none"
-        autoCorrect={false}
-      />
+          <FormInput
+            // labelValue={lastName}
+            onChangeText={text => handleChange('lastName', text)}
+            placeholderText="Last Name"
+            iconType="form"
+            autoCapitalize="none"
+            autoCorrect={false}
+          />
 
-      <FormInput
-        // labelValue={email}
-        onChangeText={text => handleChange('email', text)}
-        placeholderText="Email"
-        iconType="mail"
-        keyboardType="email-address"
-        autoCapitalize="none"
-        autoCorrect={false}
-      />
+          <FormInput
+            // labelValue={email}
+            onChangeText={text => handleChange('email', text)}
+            placeholderText="Email"
+            iconType="mail"
+            keyboardType="email-address"
+            autoCapitalize="none"
+            autoCorrect={false}
+          />
 
-      <FormInput
-        // labelValue={password}
-        onChangeText={text => handleChange('password', text)}
-        placeholderText="Password"
-        iconType="lock"
-        secureTextEntry={true}
-      />
+          <FormInput
+            // labelValue={password}
+            onChangeText={text => handleChange('password', text)}
+            placeholderText="Password"
+            iconType="lock"
+            secureTextEntry={true}
+          />
 
-      {/* <FormInput
-        labelValue={confirmPassword}
-        onChangeText={userPassword => setConfirmPassword(userPassword)}
-        placeholderText="Confirm Password"
-        iconType="lock"
-        secureTextEntry={true}
-      /> */}
+          <FormInput
+            // labelValue={confirmPassword}
+            onChangeText={text => handleChange('confirmPassword', text)}
+            placeholderText="Confirm Password"
+            iconType="lock"
+            secureTextEntry={true}
+          />
 
-      <FormButton buttonTitle="Sign Up" onPress={() => handleSubmit()} />
+          {errMsg.trim().length !== 0 && (
+            <Text style={globalStyle.error}>{errMsg}</Text>
+          )}
 
-      <TouchableOpacity
-        style={styles.navButton}
-        onPress={() => navigation.goBack()}>
-        <Text style={styles.navButtonText}>Have an account? Sign In</Text>
-      </TouchableOpacity>
-    </View>
+          <FormButton buttonTitle="Sign Up" onPress={() => handleSubmit()} />
+
+          <TouchableOpacity
+            style={styles.navButton}
+            onPress={() => navigation.goBack()}>
+            <Text style={styles.navButtonText}>Have an account? Sign In</Text>
+          </TouchableOpacity>
+        </ScrollView>
+      )}
+    </>
   );
 };
 
@@ -87,16 +159,21 @@ export default SignupScreen;
 const styles = StyleSheet.create({
   container: {
     backgroundColor: '#f9fafd',
-    flex: 1,
+    flexGrow: 1,
     justifyContent: 'center',
     alignItems: 'center',
     padding: 20,
   },
+  header: {
+    flexDirection: 'row',
+    marginBottom: 10,
+    alignItems: 'center',
+  },
   text: {
     fontFamily: 'Kufam-SemiBoldItalic',
-    fontSize: 28,
-    marginBottom: 10,
-    color: primary,
+    fontSize: 25,
+    marginLeft: 5,
+    color: primaryColor,
   },
   navButton: {
     marginTop: 15,
@@ -104,7 +181,7 @@ const styles = StyleSheet.create({
   navButtonText: {
     fontSize: 18,
     fontWeight: '500',
-    color: primary,
+    color: primaryColor,
     fontFamily: 'Lato-Regular',
   },
 });

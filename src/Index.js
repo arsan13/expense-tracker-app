@@ -7,7 +7,6 @@ const Index = () => {
   const [token, setToken] = useState('');
 
   const handleToken = text => {
-    console.log('Index-Token ' + text);
     setToken(text);
   };
 

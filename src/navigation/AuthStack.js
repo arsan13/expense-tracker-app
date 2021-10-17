@@ -8,10 +8,14 @@ const Stack = createNativeStackNavigator();
 const AuthStack = ({handleToken}) => {
   return (
     <Stack.Navigator>
-      <Stack.Screen name="Login">
+      <Stack.Screen name="Login" options={{headerShown: false}}>
         {props => <LoginScreen handleToken={handleToken} {...props} />}
       </Stack.Screen>
-      <Stack.Screen name="Sign-up" component={SignupScreen} />
+      <Stack.Screen
+        name="Sign-up"
+        component={SignupScreen}
+        options={{headerShown: false}}
+      />
     </Stack.Navigator>
   );
 };
