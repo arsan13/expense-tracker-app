@@ -4,7 +4,7 @@ import FormInput from '../components/FormInput';
 import FormButton from '../components/FormButton';
 import {primary} from '../utils/GlobalStyle';
 
-const LoginScreen = ({navigation}) => {
+const LoginScreen = ({navigation, handleToken}) => {
   let initialState = {email: '', password: ''};
   const [data, setData] = useState(initialState);
 
@@ -15,6 +15,7 @@ const LoginScreen = ({navigation}) => {
   const handleSubmit = () => {
     console.log(data);
     setData(initialState);
+    handleToken('my Token');
   };
 
   return (

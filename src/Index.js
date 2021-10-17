@@ -6,9 +6,18 @@ import HomeStack from './navigation/HomeStack';
 const Index = () => {
   const [token, setToken] = useState('');
 
+  const handleToken = text => {
+    console.log('Index-Token ' + text);
+    setToken(text);
+  };
+
   return (
     <NavigationContainer>
-      {token.length === 0 ? <AuthStack /> : <HomeStack />}
+      {token.length === 0 ? (
+        <AuthStack handleToken={handleToken} />
+      ) : (
+        <HomeStack token={token} handleToken={handleToken} />
+      )}
     </NavigationContainer>
   );
 };

@@ -4,10 +4,12 @@ import HomeScreen from '../screens/HomeScreen';
 
 const Stack = createNativeStackNavigator();
 
-const HomeStack = () => {
+const HomeStack = ({token, handleToken}) => {
   return (
     <Stack.Navigator>
-      <Stack.Screen name="Home" component={HomeScreen} />
+      <Stack.Screen name="Home">
+        {props => <HomeScreen token={token} handleToken={handleToken} />}
+      </Stack.Screen>
     </Stack.Navigator>
   );
 };

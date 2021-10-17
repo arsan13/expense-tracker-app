@@ -5,10 +5,12 @@ import SignupScreen from '../screens/SignupScreen';
 
 const Stack = createNativeStackNavigator();
 
-const AuthStack = () => {
+const AuthStack = ({handleToken}) => {
   return (
     <Stack.Navigator>
-      <Stack.Screen name="Login" component={LoginScreen} />
+      <Stack.Screen name="Login">
+        {props => <LoginScreen handleToken={handleToken} {...props} />}
+      </Stack.Screen>
       <Stack.Screen name="Sign-up" component={SignupScreen} />
     </Stack.Navigator>
   );
