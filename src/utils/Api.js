@@ -8,8 +8,8 @@ const requests = {
 };
 
 const getService = async (method, token, id = null) => {
-  const url = baseUrl.concat(requests[method]);
-  if (id !== null) baseUrl.concat(id).concat('/');
+  let url = baseUrl.concat(requests[method]);
+  if (id !== null) url.concat(id).concat('/');
 
   console.log('URL ' + url);
   console.log('Token ' + token);
@@ -29,7 +29,7 @@ const getService = async (method, token, id = null) => {
 };
 
 const postService = async (method, token, data) => {
-  const url = baseUrl.concat(requests[method]);
+  let url = baseUrl.concat(requests[method]);
 
   console.log('URL ' + url);
   console.log(data);
