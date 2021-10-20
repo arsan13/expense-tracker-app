@@ -3,8 +3,9 @@ import axios from 'axios';
 const baseUrl = 'https://my-expense-diary.herokuapp.com/';
 
 const requests = {
-  login: `api/users/login/`,
-  register: `api/users/register/`,
+  login: 'api/users/login/',
+  register: 'api/users/register/',
+  getAllCategories: 'api/categories/',
 };
 
 const getService = async (method, token, id = null) => {
@@ -20,7 +21,7 @@ const getService = async (method, token, id = null) => {
         Authorization: token,
       },
     });
-    console.log(res);
+    console.log(res.data);
     return res.data;
   } catch (error) {
     console.log(error);
