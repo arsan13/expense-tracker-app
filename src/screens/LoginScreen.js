@@ -1,16 +1,10 @@
 import React, {useState} from 'react';
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  Image,
-  StyleSheet,
-  ActivityIndicator,
-} from 'react-native';
+import {View, Text, TouchableOpacity, Image, StyleSheet} from 'react-native';
 import FormInput from '../components/FormInput';
 import FormButton from '../components/FormButton';
 import {primaryColor, globalStyle} from '../utils/GlobalStyle';
 import {postService} from '../utils/Api';
+import Loading from '../components/Loading';
 
 const LoginScreen = ({navigation, handleToken}) => {
   let initialState = {email: '', password: ''};
@@ -47,7 +41,7 @@ const LoginScreen = ({navigation, handleToken}) => {
     <>
       {isLoading ? (
         <View style={styles.container}>
-          <ActivityIndicator size="large" color={primaryColor} />
+          <Loading />
         </View>
       ) : (
         <View style={styles.container}>

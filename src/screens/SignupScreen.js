@@ -5,13 +5,13 @@ import {
   Text,
   TouchableOpacity,
   StyleSheet,
-  ActivityIndicator,
 } from 'react-native';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import FormInput from '../components/FormInput';
 import FormButton from '../components/FormButton';
 import {primaryColor, globalStyle} from '../utils/GlobalStyle';
 import {postService} from '../utils/Api';
+import Loading from '../components/Loading';
 
 const SignupScreen = ({navigation}) => {
   const initialState = {
@@ -84,7 +84,7 @@ const SignupScreen = ({navigation}) => {
     <>
       {isLoading ? (
         <View style={styles.container}>
-          <ActivityIndicator size="large" color={primaryColor} />
+          <Loading />
         </View>
       ) : (
         <ScrollView contentContainerStyle={styles.container}>
