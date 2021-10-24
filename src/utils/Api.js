@@ -12,8 +12,8 @@ const getService = async (method, token, id = null) => {
   let url = baseUrl.concat(requests[method]);
   if (id !== null) url.concat(id).concat('/');
 
-  console.log('URL ' + url);
-  console.log('Token ' + token);
+  console.log({url});
+  console.log({token});
 
   try {
     const res = await axios.get(url, {
@@ -32,9 +32,9 @@ const getService = async (method, token, id = null) => {
 const postService = async (method, token, data) => {
   let url = baseUrl.concat(requests[method]);
 
-  console.log('URL ' + url);
-  console.log(data);
-  console.log('Token ' + token);
+  console.log({url});
+  console.log({data});
+  console.log({token});
 
   try {
     const res = await axios.post(url, data, {

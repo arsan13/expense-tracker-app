@@ -1,10 +1,20 @@
 import React, {useState} from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import AuthStack from './navigation/AuthStack';
-import HomeStack from './navigation/HomeStack';
+import AppStack from './navigation/AppStack';
 
 const Index = () => {
-  const [token, setToken] = useState('');
+  const [token, setToken] = useState('temp');
+
+  // Name
+  // ------
+  // Home
+  // Categories
+  // History
+  // Charts
+  // Export
+  // Reminders
+  // Logout
 
   const handleToken = text => {
     setToken(text);
@@ -15,7 +25,7 @@ const Index = () => {
       {token.length === 0 ? (
         <AuthStack handleToken={handleToken} />
       ) : (
-        <HomeStack token={token} handleToken={handleToken} />
+        <AppStack token={token} handleToken={handleToken} />
       )}
     </NavigationContainer>
   );
