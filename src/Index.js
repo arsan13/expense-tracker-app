@@ -6,16 +6,6 @@ import AppStack from './navigation/AppStack';
 const Index = () => {
   const [token, setToken] = useState('temp');
 
-  // Name
-  // ------
-  // Home
-  // Categories
-  // History
-  // Charts
-  // Export
-  // Reminders
-  // Logout
-
   const handleToken = text => {
     setToken(text);
   };

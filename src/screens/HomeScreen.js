@@ -1,10 +1,22 @@
 import React from 'react';
-import {StyleSheet, Text, View} from 'react-native';
+import {Button, StyleSheet, Text, View} from 'react-native';
 
-const HomeScreen = ({token, navigation, categories}) => {
+const HomeScreen = ({categories, navigation}) => {
   return (
     <View style={styles.container}>
       <Text>Home Screen</Text>
+      <Button
+        title="Add Transaction"
+        onPress={() => {
+          navigation.navigate('AddTransactionScreen');
+        }}
+      />
+      <Button
+        title="Open drawer"
+        onPress={() => {
+          navigation.openDrawer();
+        }}
+      />
     </View>
   );
 };

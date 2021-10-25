@@ -9,6 +9,7 @@ import {getService} from '../utils/Api';
 import TransactionsScreen from '../screens/History';
 import ReminderScreen from '../screens/ReminderScreen';
 import ChartScreen from '../screens/ChartScreen';
+import HomeStack from './HomeStack';
 
 const Drawer = createDrawerNavigator();
 
@@ -30,33 +31,24 @@ const AppStack = ({token, handleToken}) => {
 
   return (
     <Drawer.Navigator
-      initialRouteName="Home"
-      drawerContentOptions={{
-        activeTintColor: 'red',
-        activeBackgroundColor: 'grey',
-        inactiveTintColor: 'blue',
-        inactiveBackgroundColor: 'white',
-        labelStyle: {
-          marginLeft: 5,
-        },
-      }}
+      initialRouteName="HomeStack"
       drawerContent={props => (
         <CustomSidebar handleToken={handleToken} {...props} />
       )}>
-      <Drawer.Screen name="Home">
-        {props => <HomeScreen token={token} categories={categories} />}
+      <Drawer.Screen name="HomeStack" options={{headerShown: false}}>
+        {props => <HomeStack categories={categories} />}
       </Drawer.Screen>
       <Drawer.Screen name="Categories">
-        {props => <CategoryScreen token={token} categories={categories} />}
+        {props => <CategoryScreen categories={categories} />}
       </Drawer.Screen>
       <Drawer.Screen name="Transactions">
-        {props => <TransactionsScreen token={token} categories={categories} />}
+        {props => <TransactionsScreen categories={categories} />}
       </Drawer.Screen>
       <Drawer.Screen name="Reminders">
-        {props => <ReminderScreen token={token} categories={categories} />}
+        {props => <ReminderScreen categories={categories} />}
       </Drawer.Screen>
       <Drawer.Screen name="Charts">
-        {props => <ChartScreen token={token} categories={categories} />}
+        {props => <ChartScreen categories={categories} />}
       </Drawer.Screen>
     </Drawer.Navigator>
   );

@@ -52,7 +52,7 @@ const CustomSidebar = ({handleToken, ...props}) => {
             )}
             label="Home"
             onPress={() => {
-              props.navigation.navigate('Home');
+              props.navigation.navigate('HomeStack');
             }}
           />
           <DrawerItem
