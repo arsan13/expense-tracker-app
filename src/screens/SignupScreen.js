@@ -40,7 +40,7 @@ const SignupScreen = ({navigation}) => {
 
     delete data.confirmPassword;
 
-    const res = await postService('register', '', data);
+    const res = await postService('REGISTER_API', '', data);
     if (res !== null) {
       setData(initialState);
       setIsLoading(false);

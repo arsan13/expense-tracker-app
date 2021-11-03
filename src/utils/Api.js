@@ -3,9 +3,9 @@ import axios from 'axios';
 const baseUrl = 'https://my-expense-diary.herokuapp.com/';
 
 const requests = {
-  login: 'api/users/login/',
-  register: 'api/users/register/',
-  getAllCategories: 'api/categories/',
+  LOGIN_API: 'api/users/login/',
+  REGISTER_API: 'api/users/register/',
+  CATEGORIES_API: 'api/categories/',
 };
 
 const getService = async (method, token, id = null) => {

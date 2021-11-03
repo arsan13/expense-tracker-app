@@ -18,7 +18,7 @@ const AppStack = ({token, handleToken}) => {
 
   const fetchAllCategories = async () => {
     try {
-      let data = await getService('getAllCategories', token);
+      let data = await getService('CATEGORIES_API', token);
       setCategories(data);
     } catch (error) {
       console.log(error);

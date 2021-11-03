@@ -4,7 +4,7 @@ import AuthStack from './navigation/AuthStack';
 import AppStack from './navigation/AppStack';
 
 const Index = () => {
-  const [token, setToken] = useState('temp');
+  const [token, setToken] = useState('');
 
   const handleToken = text => {
     setToken(text);

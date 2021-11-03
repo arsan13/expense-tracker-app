@@ -26,7 +26,7 @@ const LoginScreen = ({navigation, handleToken}) => {
       return;
     }
 
-    const res = await postService('login', '', data);
+    const res = await postService('LOGIN_API', '', data);
     if (res !== null) {
       setData(initialState);
       setIsLoading(false);
