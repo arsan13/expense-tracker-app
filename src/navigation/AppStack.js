@@ -5,7 +5,7 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import HomeScreen from '../screens/HomeScreen';
 import CategoryScreen from '../screens/CategoryScreen';
 import CustomSidebar from '../components/CustomSidebar';
-import {getService} from '../utils/Api';
+import {getService, postService} from '../utils/Api';
 import TransactionsScreen from '../screens/History';
 import ReminderScreen from '../screens/ReminderScreen';
 import ChartScreen from '../screens/ChartScreen';
@@ -16,6 +16,7 @@ const Drawer = createDrawerNavigator();
 const AppStack = ({token, handleToken}) => {
   const [categories, setCategories] = useState([]);
 
+  //Read Categories
   const fetchAllCategories = async () => {
     try {
       let data = await getService('CATEGORIES_API', token);
@@ -23,6 +24,16 @@ const AppStack = ({token, handleToken}) => {
     } catch (error) {
       console.log(error);
     }
+  };
+
+  //Add Category
+  const addCategory = async category => {
+    const data = await postService('CATEGORIES_API', token, category);
+    if (data !== null) {
+      setCategories([...categories, data]);
+      return true;
+    }
+    return false;
   };
 
   useEffect(() => {
@@ -39,7 +50,9 @@ const AppStack = ({token, handleToken}) => {
         {props => <HomeStack categories={categories} />}
       </Drawer.Screen>
       <Drawer.Screen name="Categories">
-        {props => <CategoryScreen categories={categories} />}
+        {props => (
+          <CategoryScreen categories={categories} addCategory={addCategory} />
+        )}
       </Drawer.Screen>
       <Drawer.Screen name="Transactions">
         {props => <TransactionsScreen categories={categories} />}
