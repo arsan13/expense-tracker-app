@@ -50,4 +50,46 @@ const postService = async (method, token, data) => {
   }
 };
 
-export {getService, postService};
+const putService = async (method, token, data, id) => {
+  let url = baseUrl.concat(requests[method]).concat(id);
+
+  console.log({url});
+  console.log({data});
+  console.log({token});
+
+  try {
+    const res = await axios.put(url, data, {
+      headers: {
+        Authorization: token,
+      },
+    });
+    console.log(res.data);
+    return res.data;
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
+};
+
+const deleteService = async (method, token, id) => {
+  let url = baseUrl.concat(requests[method]).concat(id);
+
+  console.log({url});
+  console.log({id});
+  console.log({token});
+
+  try {
+    const res = await axios.delete(url, {
+      headers: {
+        Authorization: token,
+      },
+    });
+    console.log(res.data);
+    return res.data;
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
+};
+
+export {getService, postService, putService, deleteService};

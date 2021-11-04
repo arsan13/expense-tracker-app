@@ -1,11 +1,16 @@
 import React, {useState} from 'react';
-import {StyleSheet, Text, View, FlatList} from 'react-native';
+import {StyleSheet, Text, View, FlatList, Button} from 'react-native';
 import FormButton from '../components/FormButton';
 import FormInput from '../components/FormInput';
 import Loading from '../components/Loading';
 import {globalStyle} from '../utils/GlobalStyle';
 
-const CategoryScreen = ({categories, addCategory}) => {
+const CategoryScreen = ({
+  categories,
+  addCategory,
+  deleteCategory,
+  updateCategory,
+}) => {
   let initialState = {
     title: '',
     description: '',
@@ -13,6 +18,7 @@ const CategoryScreen = ({categories, addCategory}) => {
 
   const [payload, setPayload] = useState(initialState);
   const [errMsg, setErrMsg] = useState('');
+  const [isUpdate, setIsUpdate] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
   const handleChange = (key, value) => {
@@ -24,18 +30,36 @@ const CategoryScreen = ({categories, addCategory}) => {
 
     // Validation
     if (payload.title.trim() === '') {
+      // Add Alert
       setErrMsg('Fill the title');
       setIsLoading(false);
       return;
     }
 
-    const isAdded = await addCategory(payload);
-    if (isAdded === true) {
+    let isSuccessful;
+    if (isUpdate) isSuccessful = await updateCategory(payload);
+    else isSuccessful = await addCategory(payload);
+
+    if (isSuccessful === true) {
       setPayload(initialState);
     } else {
+      //Add Alert
       setErrMsg('Problem occured. Try again');
     }
     setIsLoading(false);
+  };
+
+  const handleDelete = async id => {
+    const isDeleted = await deleteCategory(id);
+    if (isDeleted === false) {
+      //Add alert
+      console.log('Problem deleting category');
+    }
+  };
+
+  const handleUpdate = async item => {
+    setIsUpdate(true);
+    setPayload(item);
   };
 
   return (
@@ -75,13 +99,16 @@ const CategoryScreen = ({categories, addCategory}) => {
         )}
       </View>
       <FlatList
+        style={{marginTop: 5}}
         data={categories}
         keyExtractor={item => item.id}
         renderItem={({item}) => (
           <View>
-            <Text style={{fontSize: 20, textAlign: 'center'}}>
-              {item.title}
-            </Text>
+            <View style={{flexDirection: 'row'}}>
+              <Text style={{fontSize: 20, color: 'black'}}>{item.title}</Text>
+              <Button title="Delete" onPress={() => handleDelete(item.id)} />
+              <Button title="Update" onPress={() => handleUpdate(item)} />
+            </View>
           </View>
         )}
       />

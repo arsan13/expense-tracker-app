@@ -1,11 +1,8 @@
 import React, {useState, useEffect} from 'react';
-import {StyleSheet} from 'react-native';
 import {createDrawerNavigator} from '@react-navigation/drawer';
-import AntDesign from 'react-native-vector-icons/AntDesign';
-import HomeScreen from '../screens/HomeScreen';
 import CategoryScreen from '../screens/CategoryScreen';
 import CustomSidebar from '../components/CustomSidebar';
-import {getService, postService} from '../utils/Api';
+import {deleteService, getService, postService, putService} from '../utils/Api';
 import TransactionsScreen from '../screens/History';
 import ReminderScreen from '../screens/ReminderScreen';
 import ChartScreen from '../screens/ChartScreen';
@@ -36,6 +33,38 @@ const AppStack = ({token, handleToken}) => {
     return false;
   };
 
+  //Update Category
+  const updateCategory = async category => {
+    const res = await putService(
+      'CATEGORIES_API',
+      token,
+      category,
+      category.id,
+    );
+    if (res !== null) {
+      // fetchAllCategories();
+      let updatedCategories = [];
+      categories.map(item =>
+        item.id === category.id
+          ? updatedCategories.push(res)
+          : updatedCategories.push(item),
+      );
+      setCategories(updatedCategories);
+      return true;
+    }
+    return false;
+  };
+
+  //Delete Category
+  const deleteCategory = async id => {
+    const res = await deleteService('CATEGORIES_API', token, id);
+    if (res !== null) {
+      setCategories(categories.filter(category => category.id !== id));
+      return true;
+    }
+    return false;
+  };
+
   useEffect(() => {
     fetchAllCategories();
   }, []);
@@ -51,7 +80,12 @@ const AppStack = ({token, handleToken}) => {
       </Drawer.Screen>
       <Drawer.Screen name="Categories">
         {props => (
-          <CategoryScreen categories={categories} addCategory={addCategory} />
+          <CategoryScreen
+            categories={categories}
+            addCategory={addCategory}
+            updateCategory={updateCategory}
+            deleteCategory={deleteCategory}
+          />
         )}
       </Drawer.Screen>
       <Drawer.Screen name="Transactions">
