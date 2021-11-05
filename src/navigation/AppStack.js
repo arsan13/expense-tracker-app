@@ -17,6 +17,7 @@ const AppStack = ({token, handleToken}) => {
   const fetchAllCategories = async () => {
     try {
       let data = await getService('CATEGORIES_API', token);
+      // data = calculateTotalExpense(data);
       setCategories(data);
     } catch (error) {
       console.log(error);
@@ -65,6 +66,27 @@ const AppStack = ({token, handleToken}) => {
     return false;
   };
 
+  //Add transaction
+  const addTransaction = async (transaction, categoryId) => {
+    const data = await postService(
+      'TRANSACTIONS_API',
+      token,
+      transaction,
+      categoryId,
+    );
+    if (data !== null) {
+      // for (let item in categories) {
+      //   if (item.id === categoryId) {
+      //     item.transactions.push(data);
+      //     console.log(item.transactions);
+      //   }
+      // }
+      fetchAllCategories();
+      return true;
+    }
+    return false;
+  };
+
   useEffect(() => {
     fetchAllCategories();
   }, []);
@@ -76,7 +98,9 @@ const AppStack = ({token, handleToken}) => {
         <CustomSidebar handleToken={handleToken} {...props} />
       )}>
       <Drawer.Screen name="HomeStack" options={{headerShown: false}}>
-        {props => <HomeStack categories={categories} />}
+        {props => (
+          <HomeStack categories={categories} addTransaction={addTransaction} />
+        )}
       </Drawer.Screen>
       <Drawer.Screen name="Categories">
         {props => (

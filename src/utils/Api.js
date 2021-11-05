@@ -6,6 +6,7 @@ const requests = {
   LOGIN_API: 'api/users/login/',
   REGISTER_API: 'api/users/register/',
   CATEGORIES_API: 'api/categories/',
+  TRANSACTIONS_API: '/transactions/',
 };
 
 const getService = async (method, token, id = null) => {
@@ -29,8 +30,15 @@ const getService = async (method, token, id = null) => {
   }
 };
 
-const postService = async (method, token, data) => {
-  let url = baseUrl.concat(requests[method]);
+const postService = async (method, token, data, id = null) => {
+  let url = baseUrl;
+
+  if (method === 'TRANSACTIONS_API') {
+    url = url
+      .concat(requests['CATEGORIES_API'])
+      .concat(id)
+      .concat(requests['TRANSACTIONS_API']);
+  } else url = url.concat(requests[method]);
 
   console.log({url});
   console.log({data});
