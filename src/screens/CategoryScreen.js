@@ -37,8 +37,12 @@ const CategoryScreen = ({
     }
 
     let isSuccessful;
-    if (isUpdate) isSuccessful = await updateCategory(payload);
-    else isSuccessful = await addCategory(payload);
+    if (isUpdate) {
+      isSuccessful = await updateCategory(payload);
+      setIsUpdate(false);
+    } else {
+      isSuccessful = await addCategory(payload);
+    }
 
     if (isSuccessful === true) {
       setPayload(initialState);
