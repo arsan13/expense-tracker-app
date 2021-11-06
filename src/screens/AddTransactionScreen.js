@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import {FlatList, StyleSheet, Text, View, Button} from 'react-native';
-import DateTimePicker from '@react-native-community/datetimepicker';
+import DatePicker from '../components/DatePicker';
 import FormButton from '../components/FormButton';
 import FormInput from '../components/FormInput';
 import Loading from '../components/Loading';
@@ -23,10 +23,9 @@ const AddTransactionScreen = ({categories, addTransaction}) => {
     setPayload({...payload, [key]: value});
   };
 
-  const handleSelectDate = (event, selectedDate) => {
-    const currentDate = selectedDate || date;
+  const handleSelectDate = selectedDate => {
     setShowDatePicker(false);
-    setDate(currentDate);
+    setDate(selectedDate);
     setPayload({...payload, transactionDate: date.getTime()});
   };
 
@@ -113,14 +112,7 @@ const AddTransactionScreen = ({categories, addTransaction}) => {
               </Text>
             )}
             {showDatePicker && (
-              <DateTimePicker
-                testID="dateTimePicker"
-                value={new Date()}
-                mode="date"
-                display="calendar"
-                maximumDate={new Date()}
-                onChange={handleSelectDate}
-              />
+              <DatePicker handleSelectDate={handleSelectDate} />
             )}
             <FormInput
               labelValue={payload.note}
