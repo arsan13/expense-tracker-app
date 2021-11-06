@@ -24,9 +24,10 @@ const AddTransactionScreen = ({categories, addTransaction}) => {
   };
 
   const handleSelectDate = (event, selectedDate) => {
-    setDate(selectedDate);
-    setPayload({...payload, transactionDate: date.getTime()});
+    const currentDate = selectedDate || date;
     setShowDatePicker(false);
+    setDate(currentDate);
+    setPayload({...payload, transactionDate: date.getTime()});
   };
 
   const handleSubmit = async () => {
@@ -59,7 +60,6 @@ const AddTransactionScreen = ({categories, addTransaction}) => {
       setErrMsg('Please select the category');
       return false;
     }
-    payload.amount = parseInt(payload.amount);
     return true;
   };
 
@@ -115,9 +115,10 @@ const AddTransactionScreen = ({categories, addTransaction}) => {
             {showDatePicker && (
               <DateTimePicker
                 testID="dateTimePicker"
-                value={date}
+                value={new Date()}
                 mode="date"
                 display="calendar"
+                maximumDate={new Date()}
                 onChange={handleSelectDate}
               />
             )}
