@@ -11,12 +11,6 @@ const HomeScreen = ({categories, navigation}) => {
           navigation.navigate('AddTransactionScreen');
         }}
       />
-      <Button
-        title="Open drawer"
-        onPress={() => {
-          navigation.openDrawer();
-        }}
-      />
     </View>
   );
 };

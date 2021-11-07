@@ -27,20 +27,18 @@ const HomeStack = ({categories, navigation, addTransaction}) => {
         //   ),
         //   headerLeftContainerStyle: {paddingLeft: 10},
         // })}
-        component={({navigation}) => (
-          <HomeScreen navigation={navigation} categories={categories} />
-        )}
-      />
-      <Stack.Screen
-        name="AddTransactionScreen"
-        component={({navigation}) => (
+      >
+        {props => <HomeScreen categories={categories} {...props} />}
+      </Stack.Screen>
+      <Stack.Screen name="AddTransactionScreen">
+        {props => (
           <AddTransactionScreen
-            navigation={navigation}
             categories={categories}
             addTransaction={addTransaction}
+            {...props}
           />
         )}
-      />
+      </Stack.Screen>
     </Stack.Navigator>
   );
 };

@@ -73,7 +73,7 @@ const AddTransactionScreen = ({categories, addTransaction}) => {
         ) : (
           <View>
             <FormInput
-              labelValue={payload.amount}
+              labelValue={payload.amount.toString()}
               onChangeText={text => handleChange('amount', text)}
               placeholderText="Amount"
               // iconType="form"
