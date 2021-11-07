@@ -99,7 +99,11 @@ const AppStack = ({token, handleToken}) => {
       )}>
       <Drawer.Screen name="HomeStack" options={{headerShown: false}}>
         {props => (
-          <HomeStack categories={categories} addTransaction={addTransaction} />
+          <HomeStack
+            handleToken={handleToken}
+            categories={categories}
+            addTransaction={addTransaction}
+          />
         )}
       </Drawer.Screen>
       <Drawer.Screen name="Categories">

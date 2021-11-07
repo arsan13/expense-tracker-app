@@ -1,17 +1,24 @@
 import React from 'react';
 import {Button, StyleSheet, Text, View} from 'react-native';
+import ErrorScreen from './ErrorScreen';
 
-const HomeScreen = ({categories, navigation}) => {
+const HomeScreen = ({handleToken, categories, navigation}) => {
   return (
-    <View style={styles.container}>
-      <Text>Home Screen</Text>
-      <Button
-        title="Add Transaction"
-        onPress={() => {
-          navigation.navigate('AddTransactionScreen');
-        }}
-      />
-    </View>
+    <>
+      {categories === null ? (
+        <ErrorScreen handleToken={handleToken} />
+      ) : (
+        <View style={styles.container}>
+          <Text>Home Screen</Text>
+          <Button
+            title="Add Transaction"
+            onPress={() => {
+              navigation.navigate('AddTransactionScreen');
+            }}
+          />
+        </View>
+      )}
+    </>
   );
 };
 
@@ -21,6 +28,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
-    alignContent: 'center',
+    alignItems: 'center',
   },
 });

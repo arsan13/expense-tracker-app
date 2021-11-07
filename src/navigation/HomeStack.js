@@ -6,7 +6,7 @@ import DrawerIcon from '../components/DrawerIcon';
 
 const Stack = createNativeStackNavigator();
 
-const HomeStack = ({categories, navigation, addTransaction}) => {
+const HomeStack = ({handleToken, categories, navigation, addTransaction}) => {
   return (
     <Stack.Navigator>
       <Stack.Screen
@@ -28,7 +28,13 @@ const HomeStack = ({categories, navigation, addTransaction}) => {
         //   headerLeftContainerStyle: {paddingLeft: 10},
         // })}
       >
-        {props => <HomeScreen categories={categories} {...props} />}
+        {props => (
+          <HomeScreen
+            handleToken={handleToken}
+            categories={categories}
+            {...props}
+          />
+        )}
       </Stack.Screen>
       <Stack.Screen name="AddTransactionScreen">
         {props => (
