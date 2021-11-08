@@ -1,18 +1,18 @@
 import React, {useState} from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 
-const YearPicker = ({handleChange}) => {
+const YearPicker = ({handleSelectDate}) => {
   let presentYear = new Date().getFullYear();
   const [year, setYear] = useState(presentYear);
 
   const handlePrev = () => {
     setYear(year - 1);
-    // handleChange(year);
+    handleSelectDate(year - 1);
   };
 
   const handleNext = () => {
     setYear(year + 1);
-    // handleChange(year);
+    handleSelectDate(year + 1);
   };
 
   return (
@@ -44,7 +44,7 @@ const styles = StyleSheet.create({
   },
   text: {
     fontSize: 15,
-    paddingVertical: 5,
+    // paddingVertical: 5,
     paddingHorizontal: 10,
   },
 });

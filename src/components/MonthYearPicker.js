@@ -9,10 +9,10 @@ const MonthYearPicker = ({handleSelectDate}) => {
     const currentDate = selectedDate || new Date();
     console.log(moment(currentDate).format('DD/MM/YYYY'));
     setDate(currentDate);
-    handleSelectDate(date);
+    handleSelectDate(currentDate);
   };
 
-  return <MonthPicker onChange={onChange} value={date} />;
+  return <MonthPicker value={date} onChange={onChange} />;
 };
 
 export default MonthYearPicker;

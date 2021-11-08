@@ -1,5 +1,6 @@
 import React from 'react';
 import {Button, StyleSheet, Text, View} from 'react-native';
+import DateTypeSelection from '../components/DateTypeSelection';
 import ErrorScreen from './ErrorScreen';
 
 const HomeScreen = ({handleToken, categories, navigation}) => {
@@ -9,13 +10,28 @@ const HomeScreen = ({handleToken, categories, navigation}) => {
         <ErrorScreen handleToken={handleToken} />
       ) : (
         <View style={styles.container}>
-          <Text>Home Screen</Text>
-          <Button
+          <View style={styles.dates}>
+            {/* <Text>Date</Text> */}
+            <DateTypeSelection />
+          </View>
+          <View style={styles.chart}>
+            <Text>Chart</Text>
+            <Button
+              title="Add Transaction"
+              onPress={() => {
+                navigation.navigate('AddTransactionScreen');
+              }}
+            />
+          </View>
+          <View style={styles.data}>
+            <Text>Categories</Text>
+          </View>
+          {/* <Button
             title="Add Transaction"
             onPress={() => {
               navigation.navigate('AddTransactionScreen');
             }}
-          />
+          /> */}
         </View>
       )}
     </>
@@ -27,7 +43,8 @@ export default HomeScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
   },
+  dates: {flex: 1, backgroundColor: 'lime'},
+  chart: {flex: 3, backgroundColor: 'yellow'},
+  data: {flex: 4, backgroundColor: 'orange'},
 });
