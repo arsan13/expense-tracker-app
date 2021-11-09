@@ -26,7 +26,7 @@ const AddTransactionScreen = ({categories, addTransaction}) => {
   const handleSelectDate = selectedDate => {
     setShowDatePicker(false);
     setDate(selectedDate);
-    setPayload({...payload, transactionDate: date.getTime()});
+    setPayload({...payload, transactionDate: selectedDate.getTime()});
   };
 
   const handleSubmit = async () => {

@@ -43,6 +43,7 @@ const DateTypeSelection = ({sendDateToHome}) => {
       <View style={styles.options}>
         {options.map((option, index) => (
           <Text
+            key={index}
             style={[
               styles.optionText,
               selectedOption === option && styles.active,
