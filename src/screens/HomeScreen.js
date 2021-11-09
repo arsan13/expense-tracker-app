@@ -20,6 +20,13 @@ const HomeScreen = ({handleToken, categories, navigation}) => {
     setDate(value);
   };
 
+  const handleCategoryPress = value => {
+    navigation.navigate('AllTransactionsScreen', {
+      categoryName: value.title,
+      transactions: value.transactions,
+    });
+  };
+
   return (
     <>
       {categories === null ? (
@@ -44,11 +51,9 @@ const HomeScreen = ({handleToken, categories, navigation}) => {
               data={categories}
               keyExtractor={item => item.id}
               renderItem={({item}) => (
-                <TouchableOpacity>
+                <TouchableOpacity onPress={() => handleCategoryPress(item)}>
                   <Card>
-                    <Text onPress={() => console.log(item.id)}>
-                      {item.title}
-                    </Text>
+                    <Text>{item.title}</Text>
                   </Card>
                 </TouchableOpacity>
               )}

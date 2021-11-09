@@ -3,6 +3,7 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import HomeScreen from '../screens/HomeScreen';
 import AddTransactionScreen from '../screens/AddTransactionScreen';
 import DrawerIcon from '../components/DrawerIcon';
+import AllTransactionsScreen from '../screens/AllTransactionsScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -16,18 +17,7 @@ const HomeStack = ({handleToken, categories, navigation, addTransaction}) => {
             title: 'Home',
             headerLeft: () => <DrawerIcon navigation={navigation} />,
           };
-        }}
-        // options={({navigation}) => ({
-        //   headerLeft: () => (
-        //     <TouchableOpacity onPress={() => navigation.toggleDrawer()}>
-        //       <View style={{marginRight: 30}}>
-        //         <Icon name="menu" size={30} />
-        //       </View>
-        //     </TouchableOpacity>
-        //   ),
-        //   headerLeftContainerStyle: {paddingLeft: 10},
-        // })}
-      >
+        }}>
         {props => (
           <HomeScreen
             handleToken={handleToken}
@@ -44,6 +34,11 @@ const HomeStack = ({handleToken, categories, navigation, addTransaction}) => {
             {...props}
           />
         )}
+      </Stack.Screen>
+      <Stack.Screen
+        name="AllTransactionsScreen"
+        options={{title: 'Transactions'}}>
+        {props => <AllTransactionsScreen {...props} />}
       </Stack.Screen>
     </Stack.Navigator>
   );
