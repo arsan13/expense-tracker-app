@@ -1,30 +1,38 @@
 import React, {useState} from 'react';
 import {StyleSheet, Text, View} from 'react-native';
+import moment from 'moment';
 import DatePicker from './DatePicker';
 import MonthYearPicker from './MonthYearPicker';
 import YearPicker from './YearPicker';
+import {primaryColor} from '../utils/GlobalStyle';
 
 const DateTypeSelection = () => {
   let date = new Date();
+  const options = ['Day', 'Month', 'Year'];
+
   const [showPicker, setShowPicker] = useState(false);
   const [selectedOption, setSelectedOption] = useState('Month');
-  const [selectedValue, setSelectedValue] = useState(date.toDateString());
+  const [selectedValue, setSelectedValue] = useState(
+    moment(date).format('MMMM, YYYY'),
+  );
 
-  const handleSelectOption = text => {
+  const handleSelectOption = index => {
+    const text = options[index];
     setSelectedOption(text);
-    if (text === 'Day') setSelectedValue(date.toLocaleDateString());
-    else setSelectedValue(date.toUTCString());
+    if (text === 'Day') setSelectedValue(date.toDateString());
+    else setSelectedValue(moment(date).format('MMMM, YYYY'));
   };
 
-  const handleDateValue = text => {
+  const handleDateValue = selectedDate => {
     setShowPicker(false);
-    console.log({text});
-    if (selectedOption === 'Day') setSelectedValue(text.toLocaleDateString());
-    else if (selectedOption === 'Month') setSelectedValue(text.toUTCString());
-    else setSelectedValue(text);
+    if (selectedOption === 'Day')
+      setSelectedValue(selectedDate.toselectedDateString());
+    else if (selectedOption === 'Month')
+      setSelectedValue(moment(selectedDate).format('MMMM, YYYY'));
+    else setSelectedValue(selectedDate);
   };
 
-  const pickerSelection = () => {
+  const pickerTypeDisplay = () => {
     if (selectedOption === 'Day')
       return <DatePicker handleSelectDate={handleDateValue} />;
     return <MonthYearPicker handleSelectDate={handleDateValue} />;
@@ -33,20 +41,27 @@ const DateTypeSelection = () => {
   return (
     <View style={styles.container}>
       <View style={styles.options}>
-        <Text onPress={() => handleSelectOption('Day')}>Day</Text>
-        <Text onPress={() => handleSelectOption('Month')}>Month</Text>
-        <Text onPress={() => handleSelectOption('Year')}>Year</Text>
+        {options.map((option, index) => (
+          <Text
+            style={[
+              styles.optionText,
+              selectedOption === option && styles.active,
+            ]}
+            onPress={() => handleSelectOption(index)}>
+            {option}
+          </Text>
+        ))}
       </View>
       <View style={styles.selected}>
         {selectedOption === 'Year' ? (
           <YearPicker handleSelectDate={handleDateValue} />
         ) : (
-          <Text style={styles.text} onPress={() => setShowPicker(true)}>
+          <Text style={styles.selectedText} onPress={() => setShowPicker(true)}>
             {selectedValue}
           </Text>
         )}
       </View>
-      <View>{showPicker && pickerSelection()}</View>
+      <View>{showPicker && pickerTypeDisplay()}</View>
     </View>
   );
 };
@@ -62,12 +77,22 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     marginVertical: 5,
   },
+  optionText: {
+    fontSize: 16,
+  },
+  active: {
+    color: primaryColor,
+    fontWeight: 'bold',
+    borderBottomColor: primaryColor,
+    borderBottomWidth: 2,
+  },
   selected: {
     alignContent: 'center',
   },
-  text: {
+  selectedText: {
     fontSize: 15,
     alignSelf: 'center',
     marginVertical: 5,
+    borderBottomWidth: 1,
   },
 });
