@@ -1,9 +1,25 @@
-import React from 'react';
-import {Button, StyleSheet, Text, View} from 'react-native';
+import React, {useState} from 'react';
+import {
+  Button,
+  FlatList,
+  StyleSheet,
+  Text,
+  View,
+  TouchableOpacity,
+} from 'react-native';
 import DateTypeSelection from '../components/DateTypeSelection';
 import ErrorScreen from './ErrorScreen';
+import {primaryColor} from '../utils/GlobalStyle';
+import Card from '../components/Card';
 
 const HomeScreen = ({handleToken, categories, navigation}) => {
+  const [date, setDate] = useState(new Date());
+
+  const getSelectedDate = (type, value) => {
+    console.log(type, value);
+    setDate(value);
+  };
+
   return (
     <>
       {categories === null ? (
@@ -11,8 +27,7 @@ const HomeScreen = ({handleToken, categories, navigation}) => {
       ) : (
         <View style={styles.container}>
           <View style={styles.dates}>
-            {/* <Text>Date</Text> */}
-            <DateTypeSelection />
+            <DateTypeSelection sendDateToHome={getSelectedDate} />
           </View>
           <View style={styles.chart}>
             <Text>Chart</Text>
@@ -23,15 +38,22 @@ const HomeScreen = ({handleToken, categories, navigation}) => {
               }}
             />
           </View>
-          <View style={styles.data}>
-            <Text>Categories</Text>
+          <View style={styles.dataContainer}>
+            <FlatList
+              style={{padding: 10}}
+              data={categories}
+              keyExtractor={item => item.id}
+              renderItem={({item}) => (
+                <TouchableOpacity>
+                  <Card>
+                    <Text onPress={() => console.log(item.id)}>
+                      {item.title}
+                    </Text>
+                  </Card>
+                </TouchableOpacity>
+              )}
+            />
           </View>
-          {/* <Button
-            title="Add Transaction"
-            onPress={() => {
-              navigation.navigate('AddTransactionScreen');
-            }}
-          /> */}
         </View>
       )}
     </>
@@ -42,9 +64,10 @@ export default HomeScreen;
 
 const styles = StyleSheet.create({
   container: {
+    // paddingHorizontal: 2,
     flex: 1,
   },
-  dates: {flex: 1, backgroundColor: 'lime'},
+  dates: {flex: 1, paddingHorizontal: 10},
   chart: {flex: 3, backgroundColor: 'yellow'},
-  data: {flex: 4, backgroundColor: 'orange'},
+  dataContainer: {flex: 4},
 });

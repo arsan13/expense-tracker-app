@@ -6,7 +6,7 @@ import MonthYearPicker from './MonthYearPicker';
 import YearPicker from './YearPicker';
 import {primaryColor} from '../utils/GlobalStyle';
 
-const DateTypeSelection = () => {
+const DateTypeSelection = ({sendDateToHome}) => {
   let date = new Date();
   const options = ['Day', 'Month', 'Year'];
 
@@ -25,11 +25,11 @@ const DateTypeSelection = () => {
 
   const handleDateValue = selectedDate => {
     setShowPicker(false);
-    if (selectedOption === 'Day')
-      setSelectedValue(selectedDate.toselectedDateString());
+    if (selectedOption === 'Day') setSelectedValue(selectedDate.toDateString());
     else if (selectedOption === 'Month')
       setSelectedValue(moment(selectedDate).format('MMMM, YYYY'));
     else setSelectedValue(selectedDate);
+    sendDateToHome(selectedOption, selectedDate);
   };
 
   const pickerTypeDisplay = () => {
