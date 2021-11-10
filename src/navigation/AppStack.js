@@ -3,6 +3,10 @@ import {createDrawerNavigator} from '@react-navigation/drawer';
 import CategoryScreen from '../screens/CategoryScreen';
 import CustomSidebar from '../components/CustomSidebar';
 import {deleteService, getService, postService, putService} from '../utils/Api';
+import {
+  calculateTotalExpense,
+  getAllTransactions,
+} from '../utils/HandleExpenses';
 import TransactionsScreen from '../screens/History';
 import ReminderScreen from '../screens/ReminderScreen';
 import ChartScreen from '../screens/ChartScreen';
@@ -12,16 +16,20 @@ const Drawer = createDrawerNavigator();
 
 const AppStack = ({token, handleToken}) => {
   const [categories, setCategories] = useState([]);
+  const [transactions, setTransactions] = useState([]);
 
   //Read Categories
   const fetchAllCategories = async () => {
-    try {
-      let data = await getService('CATEGORIES_API', token);
-      // data = calculateTotalExpense(data);
-      setCategories(data);
-    } catch (error) {
-      console.log(error);
+    let data = await getService('CATEGORIES_API', token);
+    if (data === null) {
+      setCategories(null);
+      console.log('Internal Server Error');
+      return;
     }
+    data = calculateTotalExpense(data);
+    let transactions = getAllTransactions(data);
+    setCategories(data);
+    setTransactions(transactions);
   };
 
   //Add Category
@@ -75,12 +83,6 @@ const AppStack = ({token, handleToken}) => {
       categoryId,
     );
     if (data !== null) {
-      // for (let item in categories) {
-      //   if (item.id === categoryId) {
-      //     item.transactions.push(data);
-      //     console.log(item.transactions);
-      //   }
-      // }
       fetchAllCategories();
       return true;
     }
