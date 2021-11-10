@@ -7,7 +7,7 @@ import {
   calculateTotalExpense,
   getAllTransactions,
 } from '../utils/HandleExpenses';
-import TransactionsScreen from '../screens/History';
+import AllTransactionsScreen from '../screens/AllTransactionsScreen';
 import ReminderScreen from '../screens/ReminderScreen';
 import ChartScreen from '../screens/ChartScreen';
 import HomeStack from './HomeStack';
@@ -51,14 +51,7 @@ const AppStack = ({token, handleToken}) => {
       category.id,
     );
     if (res !== null) {
-      // fetchAllCategories();
-      let updatedCategories = [];
-      categories.map(item =>
-        item.id === category.id
-          ? updatedCategories.push(res)
-          : updatedCategories.push(item),
-      );
-      setCategories(updatedCategories);
+      fetchAllCategories();
       return true;
     }
     return false;
@@ -136,8 +129,13 @@ const AppStack = ({token, handleToken}) => {
           />
         )}
       </Drawer.Screen>
-      <Drawer.Screen name="Transactions">
-        {props => <TransactionsScreen categories={categories} />}
+      <Drawer.Screen name="AllTransactions">
+        {props => (
+          <AllTransactionsScreen
+            allTransactions={transactions}
+            deleteTransaction={deleteTransaction}
+          />
+        )}
       </Drawer.Screen>
       <Drawer.Screen name="Reminders">
         {props => <ReminderScreen categories={categories} />}

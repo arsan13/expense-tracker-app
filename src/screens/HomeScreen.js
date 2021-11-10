@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   Button,
   FlatList,
@@ -9,22 +9,40 @@ import {
 } from 'react-native';
 import DateTypeSelection from '../components/DateTypeSelection';
 import ErrorScreen from './ErrorScreen';
-import {primaryColor} from '../utils/GlobalStyle';
+import {
+  getAllTransactions,
+  netExpense,
+  dateFilterHelper,
+} from '../utils/HandleExpenses';
 import Card from '../components/Card';
 
-const HomeScreen = ({handleToken, categories, navigation}) => {
-  const [date, setDate] = useState(new Date());
+const HomeScreen = ({handleToken, allCategories, navigation}) => {
+  const [categories, setCategories] = useState([]);
+  const [total, setTotal] = useState(1);
 
-  const getSelectedDate = (type, value) => {
-    console.log(type, value);
-    setDate(value);
+  const handleCategory = () => {
+    setCategories(allCategories);
+    let total = netExpense(allCategories);
+    setTotal(total);
+  };
+
+  const handleDateFilter = (type, value) => {
+    const tempCategories = dateFilterHelper(type, value, allCategories);
+    console.log({allCategories});
+    setCategories(tempCategories);
   };
 
   const handleCategoryPress = value => {
+    let category = [value];
+    let transactions = getAllTransactions(category);
     navigation.navigate('AllTransactionsScreen', {
-      category: value,
+      transactions: transactions,
     });
   };
+
+  useEffect(() => {
+    handleCategory();
+  }, [allCategories]);
 
   return (
     <>
@@ -32,8 +50,8 @@ const HomeScreen = ({handleToken, categories, navigation}) => {
         <ErrorScreen handleToken={handleToken} />
       ) : (
         <View style={styles.container}>
-          <View style={styles.dates}>
-            <DateTypeSelection sendDateToHome={getSelectedDate} />
+          <View style={styles.dateContainer}>
+            <DateTypeSelection sendDateToHome={handleDateFilter} />
           </View>
           <View style={styles.chart}>
             <Text>Chart</Text>
@@ -53,6 +71,10 @@ const HomeScreen = ({handleToken, categories, navigation}) => {
                 <TouchableOpacity onPress={() => handleCategoryPress(item)}>
                   <Card>
                     <Text>{item.title}</Text>
+                    <Text>
+                      {Math.round((item.totalExpense / total) * 100)} %
+                    </Text>
+                    <Text>{item.totalExpense}</Text>
                   </Card>
                 </TouchableOpacity>
               )}
@@ -71,7 +93,18 @@ const styles = StyleSheet.create({
     // paddingHorizontal: 2,
     flex: 1,
   },
-  dates: {flex: 1, paddingHorizontal: 10},
-  chart: {flex: 3, backgroundColor: 'grey'},
-  dataContainer: {flex: 4},
+  dateContainer: {
+    flex: 1,
+    backgroundColor: '#fff',
+    margin: 15,
+    borderRadius: 10,
+    paddingHorizontal: 10,
+  },
+  chart: {
+    flex: 3,
+    backgroundColor: 'grey',
+  },
+  dataContainer: {
+    flex: 4,
+  },
 });

@@ -70,7 +70,7 @@ const CustomSidebar = ({handleToken, ...props}) => {
             )}
             label="Transactions"
             onPress={() => {
-              props.navigation.navigate('Transactions');
+              props.navigation.navigate('AllTransactions');
             }}
           />
           <DrawerItem

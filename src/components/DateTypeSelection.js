@@ -21,6 +21,8 @@ const DateTypeSelection = ({sendDateToHome}) => {
     setSelectedOption(text);
     if (text === 'Day') setSelectedValue(date.toDateString());
     else setSelectedValue(moment(date).format('MMMM, YYYY'));
+    if (text === 'Year') sendDateToHome('Year', date.getFullYear());
+    else sendDateToHome(text, date);
   };
 
   const handleDateValue = selectedDate => {

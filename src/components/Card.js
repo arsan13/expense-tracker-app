@@ -27,5 +27,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     paddingVertical: 10,
     paddingHorizontal: 15,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
   },
 });

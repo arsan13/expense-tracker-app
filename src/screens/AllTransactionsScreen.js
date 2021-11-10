@@ -1,14 +1,47 @@
 import React, {useState, useEffect} from 'react';
 import {Button, FlatList, StyleSheet, Text, View} from 'react-native';
+import DateTypeSelection from '../components/DateTypeSelection';
 import Loading from '../components/Loading';
 
-const AllTransactionsScreen = ({route, deleteTransaction}) => {
-  const category = route.params.category;
+const AllTransactionsScreen = ({route, allTransactions, deleteTransaction}) => {
   const [transactions, setTransactions] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
+  const handleDateFilter = (type, value) => {
+    switch (type) {
+      case 'Day':
+        setTransactions(
+          allTransactions.filter(
+            item =>
+              new Date(item.transactionDate).toLocaleDateString() ===
+              value.toLocaleDateString(),
+          ),
+        );
+        break;
+      case 'Month':
+        setTransactions(
+          allTransactions.filter(item => {
+            let date = new Date(item.transactionDate);
+            return (
+              date.getMonth() === value.getMonth() &&
+              date.getFullYear() === value.getFullYear()
+            );
+          }),
+        );
+        break;
+      case 'Year':
+        setTransactions(
+          allTransactions.filter(
+            item => new Date(item.transactionDate).getFullYear() === value,
+          ),
+        );
+        break;
+    }
+  };
+
   useEffect(() => {
-    setTransactions(category.transactions);
+    if (route === undefined) handleDateFilter('Month', new Date());
+    else setTransactions(route.params.transactions);
   }, []);
 
   const sortTransactions = property => {
@@ -18,13 +51,14 @@ const AllTransactionsScreen = ({route, deleteTransaction}) => {
     setTransactions(sortedData);
   };
 
-  const handleDelete = async transactionId => {
+  const handleDelete = async transaction => {
     setIsLoading(true);
-    const isDeleted = await deleteTransaction(category.id, transactionId);
+    const isDeleted = await deleteTransaction(
+      transaction.categoryId,
+      transaction.id,
+    );
     if (isDeleted) {
-      setTransactions(
-        transactions.filter(transaction => transaction.id !== transactionId),
-      );
+      setTransactions(transactions.filter(item => item.id !== transaction.id));
     } else {
       //Add alert
       console.log('Error deleting transaction');
@@ -44,6 +78,11 @@ const AllTransactionsScreen = ({route, deleteTransaction}) => {
           onPress={() => sortTransactions('amount')}
         />
       </View>
+      <View style={styles.dateContainer}>
+        {route === undefined && (
+          <DateTypeSelection sendDateToHome={handleDateFilter} />
+        )}
+      </View>
       {isLoading ? (
         <Loading />
       ) : (
@@ -53,7 +92,7 @@ const AllTransactionsScreen = ({route, deleteTransaction}) => {
           renderItem={({item}) => (
             <View style={styles.dataContainer}>
               <View>
-                <Text style={{fontSize: 15}}>{category.title}</Text>
+                <Text style={{fontSize: 15}}>{item.categoryName}</Text>
                 <Text>
                   Date: {new Date(item.transactionDate).toDateString()}
                 </Text>
@@ -64,7 +103,7 @@ const AllTransactionsScreen = ({route, deleteTransaction}) => {
                 <Button
                   title="Delete"
                   onPress={() => {
-                    handleDelete(item.id);
+                    handleDelete(item);
                   }}
                 />
               </View>
@@ -85,6 +124,12 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     padding: 10,
+  },
+  dateContainer: {
+    backgroundColor: '#fff',
+    marginHorizontal: 15,
+    borderRadius: 10,
+    paddingHorizontal: 10,
   },
   dataContainer: {
     flexDirection: 'row',

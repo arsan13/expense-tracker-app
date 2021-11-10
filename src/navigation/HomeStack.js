@@ -26,7 +26,7 @@ const HomeStack = ({
         {props => (
           <HomeScreen
             handleToken={handleToken}
-            categories={categories}
+            allCategories={categories}
             {...props}
           />
         )}
