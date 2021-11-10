@@ -87,6 +87,23 @@ const AppStack = ({token, handleToken}) => {
     return false;
   };
 
+  //Delete Transaction
+  const deleteTransaction = async (categoryId, transactionId) => {
+    const res = await deleteService(
+      'TRANSACTIONS_API',
+      token,
+      categoryId,
+      transactionId,
+    );
+    if (res !== null) {
+      fetchAllCategories();
+      return true;
+    }
+    return false;
+  };
+
+  //Update Transaction
+
   useEffect(() => {
     fetchAllCategories();
   }, []);
@@ -103,6 +120,7 @@ const AppStack = ({token, handleToken}) => {
             handleToken={handleToken}
             categories={categories}
             addTransaction={addTransaction}
+            deleteTransaction={deleteTransaction}
           />
         )}
       </Drawer.Screen>

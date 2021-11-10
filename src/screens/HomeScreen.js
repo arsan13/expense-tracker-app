@@ -22,8 +22,7 @@ const HomeScreen = ({handleToken, categories, navigation}) => {
 
   const handleCategoryPress = value => {
     navigation.navigate('AllTransactionsScreen', {
-      categoryName: value.title,
-      transactions: value.transactions,
+      category: value,
     });
   };
 
@@ -73,6 +72,6 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   dates: {flex: 1, paddingHorizontal: 10},
-  chart: {flex: 3, backgroundColor: 'yellow'},
+  chart: {flex: 3, backgroundColor: 'grey'},
   dataContainer: {flex: 4},
 });

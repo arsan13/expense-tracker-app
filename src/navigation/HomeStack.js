@@ -7,7 +7,12 @@ import AllTransactionsScreen from '../screens/AllTransactionsScreen';
 
 const Stack = createNativeStackNavigator();
 
-const HomeStack = ({handleToken, categories, navigation, addTransaction}) => {
+const HomeStack = ({
+  handleToken,
+  categories,
+  addTransaction,
+  deleteTransaction,
+}) => {
   return (
     <Stack.Navigator>
       <Stack.Screen
@@ -26,7 +31,9 @@ const HomeStack = ({handleToken, categories, navigation, addTransaction}) => {
           />
         )}
       </Stack.Screen>
-      <Stack.Screen name="AddTransactionScreen">
+      <Stack.Screen
+        name="AddTransactionScreen"
+        options={{title: 'Add Transaction'}}>
         {props => (
           <AddTransactionScreen
             categories={categories}
@@ -38,7 +45,12 @@ const HomeStack = ({handleToken, categories, navigation, addTransaction}) => {
       <Stack.Screen
         name="AllTransactionsScreen"
         options={{title: 'Transactions'}}>
-        {props => <AllTransactionsScreen {...props} />}
+        {props => (
+          <AllTransactionsScreen
+            deleteTransaction={deleteTransaction}
+            {...props}
+          />
+        )}
       </Stack.Screen>
     </Stack.Navigator>
   );

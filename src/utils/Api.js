@@ -58,8 +58,15 @@ const postService = async (method, token, data, id = null) => {
   }
 };
 
-const putService = async (method, token, data, id) => {
-  let url = baseUrl.concat(requests[method]).concat(id);
+const putService = async (method, token, data, categoryId, transactionId) => {
+  let url = baseUrl;
+  if (method === 'TRANSACTIONS_API') {
+    url = url
+      .concat(requests['CATEGORIES_API'])
+      .concat(categoryId)
+      .concat(requests['TRANSACTIONS_API'])
+      .concat(transactionId);
+  } else url = url.concat(requests[method]).concat(categoryId);
 
   console.log({url});
   console.log({data});
@@ -79,11 +86,18 @@ const putService = async (method, token, data, id) => {
   }
 };
 
-const deleteService = async (method, token, id) => {
-  let url = baseUrl.concat(requests[method]).concat(id);
+const deleteService = async (method, token, categoryId, transactionId) => {
+  let url = baseUrl;
+  if (method === 'TRANSACTIONS_API') {
+    url = url
+      .concat(requests['CATEGORIES_API'])
+      .concat(categoryId)
+      .concat(requests['TRANSACTIONS_API'])
+      .concat(transactionId);
+  } else url = url.concat(requests[method]).concat(categoryId);
 
   console.log({url});
-  console.log({id});
+  console.log({categoryId});
   console.log({token});
 
   try {
