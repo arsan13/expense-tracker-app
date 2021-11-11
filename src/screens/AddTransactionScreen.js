@@ -43,12 +43,12 @@ const AddTransactionScreen = ({navigation, categories, addTransaction}) => {
       setCategoryId(null);
       setPayload(initialState);
       setErrMsg('');
+      setIsLoading(false);
       navigation.goBack();
     } else {
       setErrMsg('Error adding transaction. Try again');
+      setIsLoading(false);
     }
-
-    setIsLoading(false);
   };
 
   const validate = () => {

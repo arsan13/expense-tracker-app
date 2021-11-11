@@ -18,18 +18,14 @@ import Card from '../components/Card';
 
 const HomeScreen = ({handleToken, allCategories, navigation}) => {
   const [categories, setCategories] = useState([]);
-  const [total, setTotal] = useState(1);
-
-  const handleCategory = () => {
-    setCategories(allCategories);
-    let total = netExpense(allCategories);
-    setTotal(total);
-  };
+  const [total, setTotal] = useState(0);
 
   const handleDateFilter = (type, value) => {
-    const tempCategories = dateFilterHelper(type, value, allCategories);
-    console.log({allCategories});
-    setCategories(tempCategories);
+    let tempCategories = JSON.parse(JSON.stringify(allCategories));
+    const filteredCategories = dateFilterHelper(type, value, tempCategories);
+    setCategories(filteredCategories);
+    let total = netExpense(filteredCategories);
+    setTotal(total);
   };
 
   const handleCategoryPress = value => {
@@ -41,7 +37,8 @@ const HomeScreen = ({handleToken, allCategories, navigation}) => {
   };
 
   useEffect(() => {
-    handleCategory();
+    // handleCategory();
+    handleDateFilter('Month', new Date());
   }, [allCategories]);
 
   return (

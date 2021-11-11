@@ -30,30 +30,44 @@ const netExpense = categories => {
   return total;
 };
 
-const dateFilterHelper = (type, date, categories) => {
+// Return filtered categories to Home Screen
+const dateFilterHelper = (type, value, categories) => {
   let result = [];
-  switch (type) {
-    case 'Day':
-      break;
-    case 'Month':
-      break;
-    case 'Year':
-      // for (let category of categories) {
-      //   let tempTransactions = [];
-      //   let total = 0;
-      //   for (let txn of category.transactions) {
-      //     if (new Date(txn.transactionDate).getFullYear() === date) {
-      //       total += txn.amount;
-      //       tempTransactions.push(txn);
-      //     }
-      //   }
-      //   category.totalExpense = total;
-      //   category.transactions = tempTransactions;
-      //   if (tempTransactions.length > 0) result.push(category);
-      // }
-      break;
+
+  for (let category of categories) {
+    let tempTransactions = [];
+    let total = 0;
+    for (let txn of category.transactions) {
+      let date = new Date(txn.transactionDate);
+      switch (type) {
+        case 'Day':
+          if (date.toLocaleDateString() === value.toLocaleDateString()) {
+            total += txn.amount;
+            tempTransactions.push(txn);
+          }
+          break;
+        case 'Month':
+          if (
+            date.getMonth() === value.getMonth() &&
+            date.getFullYear() === value.getFullYear()
+          ) {
+            total += txn.amount;
+            tempTransactions.push(txn);
+          }
+          break;
+        case 'Year':
+          if (date.getFullYear() === value) {
+            total += txn.amount;
+            tempTransactions.push(txn);
+          }
+          break;
+      }
+    }
+    category.totalExpense = total;
+    category.transactions = tempTransactions;
+    if (tempTransactions.length > 0) result.push(category);
   }
-  console.log({result});
+
   return result;
 };
 
