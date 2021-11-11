@@ -6,7 +6,7 @@ import FormInput from '../components/FormInput';
 import Loading from '../components/Loading';
 import {globalStyle} from '../utils/GlobalStyle';
 
-const AddTransactionScreen = ({categories, addTransaction}) => {
+const AddTransactionScreen = ({navigation, categories, addTransaction}) => {
   let initialState = {
     amount: 0,
     note: '',
@@ -38,11 +38,12 @@ const AddTransactionScreen = ({categories, addTransaction}) => {
       return;
     }
 
-    const isSuccessful = addTransaction(payload, categoryId);
+    const isSuccessful = await addTransaction(payload, categoryId);
     if (isSuccessful) {
       setCategoryId(null);
       setPayload(initialState);
       setErrMsg('');
+      navigation.goBack();
     } else {
       setErrMsg('Error adding transaction. Try again');
     }

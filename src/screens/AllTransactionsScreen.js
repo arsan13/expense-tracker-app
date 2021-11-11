@@ -1,13 +1,17 @@
 import React, {useState, useEffect} from 'react';
-import {Button, FlatList, StyleSheet, Text, View} from 'react-native';
+import {Button, FlatList, StyleSheet, Text, View, Alert} from 'react-native';
 import DateTypeSelection from '../components/DateTypeSelection';
+import ExportToExcel from '../utils/ExportToExcel';
 import Loading from '../components/Loading';
+import moment from 'moment';
 
 const AllTransactionsScreen = ({route, allTransactions, deleteTransaction}) => {
   const [transactions, setTransactions] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [dateAndtype, setDateAndType] = useState([]);
 
   const handleDateFilter = (type, value) => {
+    setDateAndType([type, value]);
     switch (type) {
       case 'Day':
         setTransactions(
@@ -39,17 +43,36 @@ const AllTransactionsScreen = ({route, allTransactions, deleteTransaction}) => {
     }
   };
 
-  useEffect(() => {
-    if (route === undefined) handleDateFilter('Month', new Date());
-    else setTransactions(route.params.transactions);
-  }, []);
-
   const sortTransactions = property => {
     const sortedData = [...transactions].sort(
       (a, b) => b[property] - a[property],
     );
     setTransactions(sortedData);
   };
+
+  const handleExport = async () => {
+    if (transactions.length < 1) return;
+    setIsLoading(true);
+
+    //Covert transactionDate, rename key names and remove id(transaction) and categoryId
+    let data = JSON.parse(JSON.stringify(transactions));
+    for (let item of data) {
+      item.date = moment(new Date(item.transactionDate)).format('DD-MMM-YYYY');
+      item.category = item.categoryName;
+      delete item.transactionDate;
+      delete item.id;
+      delete item.categoryId;
+      delete item.categoryName;
+    }
+
+    await ExportToExcel(dateAndtype[0], dateAndtype[1], data);
+    setIsLoading(false);
+  };
+
+  useEffect(() => {
+    if (route === undefined) handleDateFilter('Month', new Date());
+    else setTransactions(route.params.transactions);
+  }, []);
 
   const handleDelete = async transaction => {
     setIsLoading(true);
@@ -77,6 +100,7 @@ const AllTransactionsScreen = ({route, allTransactions, deleteTransaction}) => {
           title="Sort by amount"
           onPress={() => sortTransactions('amount')}
         />
+        <Button title="Export" onPress={handleExport} />
       </View>
       <View style={styles.dateContainer}>
         {route === undefined && (

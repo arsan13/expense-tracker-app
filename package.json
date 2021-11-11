@@ -19,13 +19,15 @@
     "react": "17.0.2",
     "react-native": "0.66.0",
     "react-native-elements": "^3.4.2",
+    "react-native-fs": "^2.18.0",
     "react-native-gesture-handler": "^1.10.3",
     "react-native-month-year-picker": "^1.8.0",
     "react-native-paper": "^4.9.2",
     "react-native-reanimated": "^2.2.3",
     "react-native-safe-area-context": "^3.3.2",
     "react-native-screens": "^3.8.0",
-    "react-native-vector-icons": "^8.1.0"
+    "react-native-vector-icons": "^8.1.0",
+    "xlsx": "^0.17.3"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",
