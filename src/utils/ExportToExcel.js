@@ -8,15 +8,17 @@ const ExportToExcel = async (type, selectedDate, data) => {
   if (type === 'Day') selectedDate = moment(selectedDate).format('DD-MMM-YYYY');
   else if (type === 'Month')
     selectedDate = moment(selectedDate).format('MMMM,YYYY');
+  else if (type === 'Year') selectedDate = selectedDate.toString();
+  else selectedDate = '';
 
   const filePath = RNFS.DownloadDirectoryPath;
-  const filename = `${filePath}/Report(${selectedDate})_${presentDate.getTime()}.xlsx`;
+  const filename = `${filePath}/Report()_${presentDate.getTime()}.xlsx`;
 
   // function to handle exporting
   const exportDataToExcel = () => {
     let wb = XLSX.utils.book_new(); //Create workbook
     let ws = XLSX.utils.json_to_sheet(data); //Create worksheet
-    XLSX.utils.book_append_sheet(wb, ws, selectedDate); //Add sheet to workbook
+    XLSX.utils.book_append_sheet(wb, ws, 'selectedDate'); //Add sheet to workbook
     const wbout = XLSX.write(wb, {type: 'binary', bookType: 'xlsx'}); //Excel file
 
     // Write generated excel to Storage
@@ -82,7 +84,7 @@ const ExportToExcel = async (type, selectedDate, data) => {
   } catch (e) {
     Alert.alert(
       'Unsuccessful!',
-      'Problem occured while checking permission. Please try again',
+      'A Problem occured. Please try again later',
       [
         {
           text: 'Ok',

@@ -8,10 +8,10 @@ import moment from 'moment';
 const AllTransactionsScreen = ({route, allTransactions, deleteTransaction}) => {
   const [transactions, setTransactions] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [dateAndtype, setDateAndType] = useState([]);
+  const [dateAndType, setdateAndType] = useState([]);
 
   const handleDateFilter = (type, value) => {
-    setDateAndType([type, value]);
+    setdateAndType([type, value]);
     switch (type) {
       case 'Day':
         setTransactions(
@@ -65,7 +65,7 @@ const AllTransactionsScreen = ({route, allTransactions, deleteTransaction}) => {
       delete item.categoryName;
     }
 
-    await ExportToExcel(dateAndtype[0], dateAndtype[1], data);
+    await ExportToExcel(dateAndType[0], dateAndType[1], data);
     setIsLoading(false);
   };
 
@@ -90,53 +90,59 @@ const AllTransactionsScreen = ({route, allTransactions, deleteTransaction}) => {
   };
 
   return (
-    <View>
-      <View style={styles.header}>
-        <Button
-          title="Sort by date"
-          onPress={() => sortTransactions('transactionDate')}
-        />
-        <Button
-          title="Sort by amount"
-          onPress={() => sortTransactions('amount')}
-        />
-        <Button title="Export" onPress={handleExport} />
-      </View>
-      <View style={styles.dateContainer}>
-        {route === undefined && (
-          <DateTypeSelection sendDateToHome={handleDateFilter} />
-        )}
-      </View>
+    <>
       {isLoading ? (
-        <Loading />
+        <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+          <Loading />
+        </View>
       ) : (
-        <FlatList
-          data={transactions}
-          keyExtractor={item => item.id}
-          renderItem={({item}) => (
-            <View style={styles.dataContainer}>
-              <View>
-                <Text style={{fontSize: 15}}>{item.categoryName}</Text>
-                <Text>
-                  Date: {new Date(item.transactionDate).toDateString()}
-                </Text>
-                <Text>Amount: {item.amount}</Text>
-                {item.note.trim() !== '' && <Text>Note: {item.note}</Text>}
-              </View>
-              <View style={{justifyContent: 'center'}}>
-                <Button
-                  title="Delete"
-                  onPress={() => {
-                    handleDelete(item);
-                  }}
-                />
-              </View>
-              {/* <View style={{borderBottomWidth: 1, marginTop: 10}} /> */}
+        <View style={{flex: 1}}>
+          <View style={styles.header}>
+            <Button
+              title="Sort by date"
+              onPress={() => sortTransactions('transactionDate')}
+            />
+            <Button
+              title="Sort by amount"
+              onPress={() => sortTransactions('amount')}
+            />
+            <Button title="Export" onPress={handleExport} />
+          </View>
+          {route === undefined && (
+            <View style={styles.dateContainer}>
+              <DateTypeSelection sendDateToHome={handleDateFilter} />
             </View>
           )}
-        />
+          <View style={styles.dataContainer}>
+            <FlatList
+              data={transactions}
+              keyExtractor={item => item.id}
+              renderItem={({item}) => (
+                <View style={styles.dataItems}>
+                  <View>
+                    <Text style={{fontSize: 15}}>{item.categoryName}</Text>
+                    <Text>
+                      Date: {new Date(item.transactionDate).toDateString()}
+                    </Text>
+                    <Text>Amount: {item.amount}</Text>
+                    {item.note.trim() !== '' && <Text>Note: {item.note}</Text>}
+                  </View>
+                  <View style={{justifyContent: 'center'}}>
+                    <Button
+                      title="Delete"
+                      onPress={() => {
+                        handleDelete(item);
+                      }}
+                    />
+                  </View>
+                  {/* <View style={{borderBottomWidth: 1, marginTop: 10}} /> */}
+                </View>
+              )}
+            />
+          </View>
+        </View>
       )}
-    </View>
+    </>
   );
 };
 
@@ -144,18 +150,25 @@ export default AllTransactionsScreen;
 
 const styles = StyleSheet.create({
   header: {
+    flex: 1,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     padding: 10,
   },
   dateContainer: {
+    flex: 2,
     backgroundColor: '#fff',
-    marginHorizontal: 15,
+    margin: 15,
     borderRadius: 10,
     paddingHorizontal: 10,
+    paddingBottom: 10,
   },
   dataContainer: {
+    marginVertical: 10,
+    flex: 12,
+  },
+  dataItems: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginVertical: 5,

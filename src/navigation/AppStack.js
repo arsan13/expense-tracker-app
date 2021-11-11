@@ -23,6 +23,7 @@ const AppStack = ({token, handleToken}) => {
     let data = await getService('CATEGORIES_API', token);
     if (data === null) {
       setCategories(null);
+      //Add alert
       console.log('Internal Server Error');
       return;
     }
@@ -129,7 +130,7 @@ const AppStack = ({token, handleToken}) => {
           />
         )}
       </Drawer.Screen>
-      <Drawer.Screen name="AllTransactions">
+      <Drawer.Screen name="AllTransactions" options={{title: 'Transactions'}}>
         {props => (
           <AllTransactionsScreen
             allTransactions={transactions}

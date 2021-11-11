@@ -21,6 +21,10 @@ const HomeScreen = ({handleToken, allCategories, navigation}) => {
   const [total, setTotal] = useState(0);
 
   const handleDateFilter = (type, value) => {
+    if (allCategories === null) {
+      setCategories(null);
+      return;
+    }
     let tempCategories = JSON.parse(JSON.stringify(allCategories));
     const filteredCategories = dateFilterHelper(type, value, tempCategories);
     setCategories(filteredCategories);
@@ -96,6 +100,7 @@ const styles = StyleSheet.create({
     margin: 15,
     borderRadius: 10,
     paddingHorizontal: 10,
+    paddingBottom: 10,
   },
   chart: {
     flex: 3,
