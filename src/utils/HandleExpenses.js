@@ -1,3 +1,5 @@
+import moment from 'moment';
+
 // Total expense of each category
 const calculateTotalExpense = categories => {
   categories.map((item, index) => {
@@ -23,7 +25,7 @@ const getAllTransactions = categories => {
   return data;
 };
 
-// Total expense on all categories
+// Total expense of the user
 const netExpense = categories => {
   let total = 0;
   for (let category of categories) total += category.totalExpense;
@@ -35,6 +37,7 @@ const dateFilterHelper = (type, value, categories) => {
   let result = [];
 
   for (let category of categories) {
+    if (category.transactions === null) continue;
     let tempTransactions = [];
     let total = 0;
     for (let txn of category.transactions) {
@@ -71,9 +74,23 @@ const dateFilterHelper = (type, value, categories) => {
   return result;
 };
 
+// Calculate expenses in each month for the desired year
+const monthlyExpenses = (transactions, year) => {
+  const result = {};
+  for (let item of transactions) {
+    let date = new Date(item.transactionDate);
+    if (date.getFullYear() !== year) continue;
+    let month = moment(date).format('MMM');
+    if (result.hasOwnProperty(month)) result[month] += item.amount;
+    else result[month] = item.amount;
+  }
+  return result;
+};
+
 export {
   calculateTotalExpense,
   getAllTransactions,
   netExpense,
   dateFilterHelper,
+  monthlyExpenses,
 };

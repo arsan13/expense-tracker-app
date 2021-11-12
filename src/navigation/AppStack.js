@@ -142,7 +142,9 @@ const AppStack = ({token, handleToken}) => {
         {props => <ReminderScreen categories={categories} />}
       </Drawer.Screen>
       <Drawer.Screen name="Charts">
-        {props => <ChartScreen categories={categories} />}
+        {props => (
+          <ChartScreen categories={categories} transactions={transactions} />
+        )}
       </Drawer.Screen>
     </Drawer.Navigator>
   );

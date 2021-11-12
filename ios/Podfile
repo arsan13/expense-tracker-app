@@ -16,6 +16,8 @@ target 'ExpenseTracker' do
 
   pod 'RNFS', :path => '../node_modules/react-native-fs'
 
+  pod 'RNSVG', :path => '../node_modules/react-native-svg'
+
   target 'ExpenseTrackerTests' do
     inherit! :complete
     # Pods for testing

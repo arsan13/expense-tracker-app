@@ -15,6 +15,7 @@ import {
   dateFilterHelper,
 } from '../utils/HandleExpenses';
 import Card from '../components/Card';
+import PieChartDesign from '../components/PieChartDesign';
 
 const HomeScreen = ({handleToken, allCategories, navigation}) => {
   const [categories, setCategories] = useState([]);
@@ -55,7 +56,7 @@ const HomeScreen = ({handleToken, allCategories, navigation}) => {
             <DateTypeSelection sendDateToHome={handleDateFilter} />
           </View>
           <View style={styles.chart}>
-            <Text>Chart</Text>
+            <PieChartDesign categories={categories} />
             <Button
               title="Add Transaction"
               onPress={() => {
@@ -65,7 +66,6 @@ const HomeScreen = ({handleToken, allCategories, navigation}) => {
           </View>
           <View style={styles.dataContainer}>
             <FlatList
-              style={{padding: 10}}
               data={categories}
               keyExtractor={item => item.id}
               renderItem={({item}) => (
@@ -97,16 +97,24 @@ const styles = StyleSheet.create({
   dateContainer: {
     flex: 1,
     backgroundColor: '#fff',
-    margin: 15,
+    marginHorizontal: 10,
+    marginTop: 15,
     borderRadius: 10,
     paddingHorizontal: 10,
     paddingBottom: 10,
   },
   chart: {
-    flex: 3,
-    backgroundColor: 'grey',
+    flex: 4,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#fff',
+    marginHorizontal: 10,
+    marginTop: 15,
+    borderRadius: 10,
   },
   dataContainer: {
     flex: 4,
+    marginHorizontal: 10,
+    marginTop: 8,
   },
 });
