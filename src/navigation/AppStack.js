@@ -5,32 +5,46 @@ import CustomSidebar from '../components/CustomSidebar';
 import {deleteService, getService, postService, putService} from '../utils/Api';
 import {
   calculateTotalExpense,
+  eliminateFutureTransactions,
   getAllTransactions,
 } from '../utils/HandleExpenses';
 import AllTransactionsScreen from '../screens/AllTransactionsScreen';
-import ReminderScreen from '../screens/ReminderScreen';
 import ChartScreen from '../screens/ChartScreen';
 import HomeStack from './HomeStack';
+import ReminderStack from './ReminderStack';
 
 const Drawer = createDrawerNavigator();
 
 const AppStack = ({token, handleToken}) => {
   const [categories, setCategories] = useState([]);
   const [transactions, setTransactions] = useState([]);
+  const [reminders, setReminders] = useState([]);
 
   //Read Categories
   const fetchAllCategories = async () => {
-    let data = await getService('CATEGORIES_API', token);
+    let allData = await getService('CATEGORIES_API', token);
     if (data === null) {
       setCategories(null);
       //Add alert
       console.log('Internal Server Error');
       return;
     }
-    data = calculateTotalExpense(data);
-    let transactions = getAllTransactions(data);
+    allData = calculateTotalExpense(allData);
+    let tempTransactions = getAllTransactions(allData);
+    let data = eliminateFutureTransactions(allData);
     setCategories(data);
-    setTransactions(transactions);
+    //Past and present transactions
+    setTransactions(
+      tempTransactions.filter(
+        item => item.transactionDate <= new Date().getTime(),
+      ),
+    );
+    //Future transactions
+    setReminders(
+      tempTransactions.filter(
+        item => item.transactionDate > new Date().getTime(),
+      ),
+    );
   };
 
   //Add Category
@@ -138,8 +152,15 @@ const AppStack = ({token, handleToken}) => {
           />
         )}
       </Drawer.Screen>
-      <Drawer.Screen name="Reminders">
-        {props => <ReminderScreen categories={categories} />}
+      <Drawer.Screen name="ReminderStack" options={{headerShown: false}}>
+        {props => (
+          <ReminderStack
+            categories={categories}
+            reminders={reminders}
+            addTransaction={addTransaction}
+            deleteTransaction={deleteTransaction}
+          />
+        )}
       </Drawer.Screen>
       <Drawer.Screen name="Charts">
         {props => (

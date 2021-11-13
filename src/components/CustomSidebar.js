@@ -7,13 +7,9 @@ import {
   Text,
   Linking,
 } from 'react-native';
-
 import {Drawer} from 'react-native-paper';
-
 import {DrawerContentScrollView, DrawerItem} from '@react-navigation/drawer';
-
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-
 import {primaryColor} from '../utils/GlobalStyle';
 
 const CustomSidebar = ({handleToken, ...props}) => {
@@ -79,7 +75,7 @@ const CustomSidebar = ({handleToken, ...props}) => {
             )}
             label="Reminders"
             onPress={() => {
-              props.navigation.navigate('Reminders');
+              props.navigation.navigate('ReminderStack');
             }}
           />
           <DrawerItem
@@ -100,6 +96,7 @@ const CustomSidebar = ({handleToken, ...props}) => {
           )}
           label="Sign Out"
           onPress={() => {
+            props.navigation.closeDrawer();
             handleToken('');
           }}
         />

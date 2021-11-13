@@ -36,7 +36,12 @@ const DateTypeSelection = ({sendDateToHome}) => {
 
   const pickerTypeDisplay = () => {
     if (selectedOption === 'Day')
-      return <DatePicker handleSelectDate={handleDateValue} />;
+      return (
+        <DatePicker
+          handleSelectDate={handleDateValue}
+          showFutureDates={false}
+        />
+      );
     return <MonthYearPicker handleSelectDate={handleDateValue} />;
   };
 

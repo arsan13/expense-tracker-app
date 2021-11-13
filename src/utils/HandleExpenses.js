@@ -25,6 +25,37 @@ const getAllTransactions = categories => {
   return data;
 };
 
+//Eliminate future transactions
+const eliminateFutureTransactions = categories => {
+  let result = [];
+  let presentDate = new Date().getTime();
+  categories = JSON.parse(JSON.stringify(categories));
+
+  for (let category of categories) {
+    let tempTransactions = [];
+    for (let trans of category.transactions) {
+      if (trans.transactionDate <= presentDate) {
+        tempTransactions.push(trans);
+      }
+    }
+    category.transactions = tempTransactions;
+    result.push(category);
+  }
+
+  return result;
+};
+
+// Return next day transaction if present
+const checkReminder = transactions => {
+  let nextDay = new Date();
+  nextDay.setDate(nextDay.getDate() + 1);
+  for (let item of transactions) {
+    if (new Date(item.transactionDate).toDateString() == nextDay.toDateString())
+      return item;
+  }
+  return null;
+};
+
 // Total expense of the user
 const netExpense = categories => {
   let total = 0;
@@ -90,6 +121,8 @@ const monthlyExpenses = (transactions, year) => {
 export {
   calculateTotalExpense,
   getAllTransactions,
+  eliminateFutureTransactions,
+  checkReminder,
   netExpense,
   dateFilterHelper,
   monthlyExpenses,

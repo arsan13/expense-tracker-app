@@ -73,7 +73,9 @@ const HomeScreen = ({handleToken, allCategories, navigation}) => {
             <Button
               title="Add Transaction"
               onPress={() => {
-                navigation.navigate('AddTransactionScreen');
+                navigation.navigate('AddTransactionScreen', {
+                  showFutureDates: false,
+                });
               }}
             />
           </View>

@@ -6,7 +6,13 @@ import FormInput from '../components/FormInput';
 import Loading from '../components/Loading';
 import {globalStyle} from '../utils/GlobalStyle';
 
-const AddTransactionScreen = ({navigation, categories, addTransaction}) => {
+const AddTransactionScreen = ({
+  navigation,
+  route,
+  categories,
+  addTransaction,
+}) => {
+  const showFutureDates = route.params.showFutureDates;
   let initialState = {
     amount: 0,
     note: '',
@@ -65,73 +71,73 @@ const AddTransactionScreen = ({navigation, categories, addTransaction}) => {
 
   return (
     <View>
-      <Text>Add Transactions</Text>
-      <View>
-        {isLoading ? (
-          <View>
-            <Loading />
-          </View>
-        ) : (
-          <View>
-            <FormInput
-              labelValue={payload.amount.toString()}
-              onChangeText={text => handleChange('amount', text)}
-              placeholderText="Amount"
-              // iconType="form"
-              autoCapitalize="none"
-              keyboardType="numeric"
-              autoCorrect={false}
-            />
-            {categoryId !== null && (
-              <Text style={{fontSize: 15, color: 'black'}}>
-                Category: {categoryId}
-              </Text>
+      {isLoading ? (
+        <View>
+          <Loading />
+        </View>
+      ) : (
+        <View>
+          <FormInput
+            labelValue={payload.amount.toString()}
+            onChangeText={text => handleChange('amount', text)}
+            placeholderText="Amount"
+            // iconType="form"
+            autoCapitalize="none"
+            keyboardType="numeric"
+            autoCorrect={false}
+          />
+          {categoryId !== null && (
+            <Text style={{fontSize: 15, color: 'black'}}>
+              Category: {categoryId}
+            </Text>
+          )}
+          <FlatList
+            style={{marginVertical: 5}}
+            data={categories}
+            keyExtractor={item => item.id}
+            renderItem={({item}) => (
+              <View>
+                <Text
+                  style={{fontSize: 20, color: 'black'}}
+                  onPress={() => setCategoryId(item.id)}>
+                  {item.title}
+                </Text>
+              </View>
             )}
-            <FlatList
-              style={{marginVertical: 5}}
-              data={categories}
-              keyExtractor={item => item.id}
-              renderItem={({item}) => (
-                <View>
-                  <Text
-                    style={{fontSize: 20, color: 'black'}}
-                    onPress={() => setCategoryId(item.id)}>
-                    {item.title}
-                  </Text>
-                </View>
-              )}
+          />
+          <Button
+            title="Select Date"
+            onPress={() => {
+              setShowDatePicker(true);
+            }}
+          />
+          {date !== undefined && (
+            <Text style={{fontSize: 15, color: 'black'}}>
+              {date.toLocaleDateString()}
+            </Text>
+          )}
+          {showDatePicker && (
+            <DatePicker
+              handleSelectDate={handleSelectDate}
+              showFutureDates={showFutureDates}
             />
-            <Button
-              title="Select Date"
-              onPress={() => {
-                setShowDatePicker(true);
-              }}
-            />
-            {date !== undefined && (
-              <Text style={{fontSize: 15, color: 'black'}}>
-                {date.toLocaleDateString()}
-              </Text>
-            )}
-            {showDatePicker && (
-              <DatePicker handleSelectDate={handleSelectDate} />
-            )}
-            <FormInput
-              labelValue={payload.note}
-              onChangeText={text => handleChange('note', text)}
-              placeholderText="Note"
-              // iconType="form"
-              autoCapitalize="none"
-              autoCorrect={false}
-            />
+          )}
+          <FormInput
+            labelValue={payload.note}
+            onChangeText={text => handleChange('note', text)}
+            placeholderText="Note"
+            // iconType="form"
+            autoCapitalize="none"
+            autoCorrect={false}
+          />
 
-            {errMsg.trim().length !== 0 && (
-              <Text style={globalStyle.error}>{errMsg}</Text>
-            )}
+          {errMsg.trim().length !== 0 && (
+            <Text style={globalStyle.error}>{errMsg}</Text>
+          )}
 
-            <FormButton buttonTitle="Add" onPress={() => handleSubmit()} />
-          </View>
-        )}
-      </View>
+          <FormButton buttonTitle="Add" onPress={() => handleSubmit()} />
+        </View>
+      )}
     </View>
   );
 };
