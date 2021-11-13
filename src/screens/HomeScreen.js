@@ -15,11 +15,20 @@ import {
   dateFilterHelper,
 } from '../utils/HandleExpenses';
 import Card from '../components/Card';
-import PieChartDesign from '../components/PieChartDesign';
+import PieChart from '../components/PieChart';
 
 const HomeScreen = ({handleToken, allCategories, navigation}) => {
   const [categories, setCategories] = useState([]);
   const [total, setTotal] = useState(0);
+  const colors = [
+    '#EBD22F',
+    '#44CD40',
+    '#C70039',
+    '#404FCD',
+    '#1e90ff',
+    '#ff7f50',
+    '#6a5acd',
+  ];
 
   const handleDateFilter = (type, value) => {
     if (allCategories === null) {
@@ -27,9 +36,14 @@ const HomeScreen = ({handleToken, allCategories, navigation}) => {
       return;
     }
     let tempCategories = JSON.parse(JSON.stringify(allCategories));
-    const filteredCategories = dateFilterHelper(type, value, tempCategories);
-    setCategories(filteredCategories);
+    let filteredCategories = dateFilterHelper(type, value, tempCategories);
     let total = netExpense(filteredCategories);
+    filteredCategories = filteredCategories.map((item, index) => {
+      item.percentage = Math.round((item.totalExpense / total) * 100);
+      item.color = colors[index];
+      return item;
+    });
+    setCategories(filteredCategories);
     setTotal(total);
   };
 
@@ -42,7 +56,6 @@ const HomeScreen = ({handleToken, allCategories, navigation}) => {
   };
 
   useEffect(() => {
-    // handleCategory();
     handleDateFilter('Month', new Date());
   }, [allCategories]);
 
@@ -56,7 +69,7 @@ const HomeScreen = ({handleToken, allCategories, navigation}) => {
             <DateTypeSelection sendDateToHome={handleDateFilter} />
           </View>
           <View style={styles.chart}>
-            <PieChartDesign categories={categories} />
+            <PieChart categories={categories} total={total} />
             <Button
               title="Add Transaction"
               onPress={() => {
@@ -70,13 +83,7 @@ const HomeScreen = ({handleToken, allCategories, navigation}) => {
               keyExtractor={item => item.id}
               renderItem={({item}) => (
                 <TouchableOpacity onPress={() => handleCategoryPress(item)}>
-                  <Card>
-                    <Text>{item.title}</Text>
-                    <Text>
-                      {Math.round((item.totalExpense / total) * 100)} %
-                    </Text>
-                    <Text>{item.totalExpense}</Text>
-                  </Card>
+                  <Card item={item} />
                 </TouchableOpacity>
               )}
             />
@@ -116,5 +123,9 @@ const styles = StyleSheet.create({
     flex: 4,
     marginHorizontal: 10,
     marginTop: 8,
+  },
+  cardContent: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
   },
 });

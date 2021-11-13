@@ -1,10 +1,19 @@
 import React from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 
-const Card = props => {
+const Card = ({item}) => {
   return (
     <View style={styles.card}>
-      <View style={styles.content}>{props.children}</View>
+      <View style={styles.content}>
+        <View style={styles.leftContent}>
+          <View style={[styles.color, {backgroundColor: item.color}]} />
+          <Text style={styles.text}>{item.title}</Text>
+        </View>
+        <View style={styles.rightContent}>
+          <Text style={styles.text}>{item.percentage} %</Text>
+          <Text style={styles.text}>{item.totalExpense}</Text>
+        </View>
+      </View>
     </View>
   );
 };
@@ -24,10 +33,31 @@ const styles = StyleSheet.create({
     // elevation: 3,
   },
   content: {
-    fontSize: 20,
-    paddingVertical: 10,
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: 12,
     paddingHorizontal: 15,
+  },
+  leftContent: {
+    flex: 4,
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+  },
+  rightContent: {
+    flex: 2,
     flexDirection: 'row',
     justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  color: {
+    marginRight: 10,
+    width: 18,
+    height: 18,
+    borderRadius: 18 / 2,
+  },
+  text: {
+    fontSize: 15,
   },
 });
