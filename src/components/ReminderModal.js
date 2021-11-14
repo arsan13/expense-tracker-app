@@ -9,12 +9,12 @@ import {
   Button,
 } from 'react-native';
 
-const ReminderModal = ({item, handleReminderItem}) => {
+const ReminderModal = ({item, handleReminderClick}) => {
   const [modalVisible, setModalVisible] = useState(true);
 
-  const handleClick = () => {
+  const handleClick = text => {
     setModalVisible(false);
-    handleReminderItem();
+    handleReminderClick(text);
   };
 
   return (
@@ -25,7 +25,8 @@ const ReminderModal = ({item, handleReminderItem}) => {
             <Text style={styles.modalText}>{item.categoryName}</Text>
             <Text style={styles.modalText}>{item.note}</Text>
             <Text style={styles.modalText}>{item.amount}</Text>
-            <Button title="Click" onPress={handleClick} />
+            <Button title="Pay" onPress={() => handleClick('Pay')} />
+            <Button title="Decline" onPress={() => handleClick('Decline')} />
           </View>
         </View>
       </Modal>

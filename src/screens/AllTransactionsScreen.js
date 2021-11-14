@@ -72,7 +72,7 @@ const AllTransactionsScreen = ({route, allTransactions, deleteTransaction}) => {
   useEffect(() => {
     if (route === undefined) handleDateFilter('Month', new Date());
     else setTransactions(route.params.transactions);
-  }, []);
+  }, [allTransactions]);
 
   const handleDelete = async transaction => {
     setIsLoading(true);

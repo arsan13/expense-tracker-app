@@ -11,6 +11,7 @@ const ReminderStack = ({
   reminders,
   addTransaction,
   deleteTransaction,
+  updateTransaction,
 }) => {
   return (
     <Stack.Navigator>
@@ -26,6 +27,7 @@ const ReminderStack = ({
           <ReminderScreen
             reminders={reminders}
             deleteTransaction={deleteTransaction}
+            updateTransaction={updateTransaction}
             {...props}
           />
         )}

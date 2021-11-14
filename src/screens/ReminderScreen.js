@@ -5,19 +5,35 @@ import Loading from '../components/Loading';
 import ReminderModal from '../components/ReminderModal';
 import {checkReminder} from '../utils/HandleExpenses';
 
-const ReminderScreen = ({navigation, reminders, deleteTransaction}) => {
+const ReminderScreen = ({
+  navigation,
+  reminders,
+  deleteTransaction,
+  updateTransaction,
+}) => {
   const [reminderItem, setReminderItem] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [data, setData] = useState([]);
 
-  const handleReminderItem = () => {
-    setReminderItem(null);
+  const handleReminder = () => {
+    const sortedReminders = [...reminders].sort(
+      (a, b) => a['transactionDate'] - b['transactionDate'],
+    );
+    setData(sortedReminders);
+    let presentDayReminders = reminders.filter(
+      item =>
+        new Date(item.transactionDate).toLocaleDateString() ===
+        new Date().toLocaleDateString(),
+    );
+    if (presentDayReminders.length > 0) setReminderItem(presentDayReminders[0]);
   };
 
-  useEffect(() => {
-    setData(reminders);
-    setReminderItem(checkReminder(reminders));
-  }, [reminders]);
+  const handleReminderClick = async text => {
+    //If reminder txn is paid => update txn remind to false, else delete the txn
+    if (text === 'Pay') await handleUpdate();
+    else await handleDelete(reminderItem);
+    setReminderItem(null);
+  };
 
   const handleDelete = async transaction => {
     setIsLoading(true);
@@ -32,6 +48,22 @@ const ReminderScreen = ({navigation, reminders, deleteTransaction}) => {
     setIsLoading(false);
   };
 
+  const handleUpdate = async () => {
+    setIsLoading(true);
+    let transaction = {...reminderItem};
+    transaction.remind = false;
+    const isUpdated = await updateTransaction(transaction);
+    if (!isUpdated) {
+      //Add alert
+      console.log('Error updating transaction');
+    }
+    setIsLoading(false);
+  };
+
+  useEffect(() => {
+    handleReminder();
+  }, [reminders]);
+
   return (
     <>
       {isLoading ? (
@@ -41,7 +73,7 @@ const ReminderScreen = ({navigation, reminders, deleteTransaction}) => {
           {reminderItem !== null ? (
             <ReminderModal
               item={reminderItem}
-              handleReminderItem={handleReminderItem}
+              handleReminderClick={handleReminderClick}
             />
           ) : (
             <View>

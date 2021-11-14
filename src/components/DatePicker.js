@@ -12,7 +12,7 @@ const DatePicker = ({handleSelectDate, showFutureDates}) => {
   if (showFutureDates) {
     // Reminder calendar
     minDate = new Date();
-    minDate.setDate(minDate.getDate() + 1);
+    // minDate.setDate(minDate.getDate() + 1);
   } else {
     // Regular calendar
     maxDate = new Date();

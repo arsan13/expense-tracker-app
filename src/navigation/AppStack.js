@@ -29,22 +29,12 @@ const AppStack = ({token, handleToken}) => {
       console.log('Internal Server Error');
       return;
     }
-    allData = calculateTotalExpense(allData);
     let tempTransactions = getAllTransactions(allData);
     let data = eliminateFutureTransactions(allData);
+    data = calculateTotalExpense(data);
     setCategories(data);
-    //Past and present transactions
-    setTransactions(
-      tempTransactions.filter(
-        item => item.transactionDate <= new Date().getTime(),
-      ),
-    );
-    //Future transactions
-    setReminders(
-      tempTransactions.filter(
-        item => item.transactionDate > new Date().getTime(),
-      ),
-    );
+    setTransactions(tempTransactions.filter(item => item.remind === false));
+    setReminders(tempTransactions.filter(item => item.remind === true));
   };
 
   //Add Category
@@ -113,6 +103,20 @@ const AppStack = ({token, handleToken}) => {
   };
 
   //Update Transaction
+  const updateTransaction = async transaction => {
+    const res = await putService(
+      'TRANSACTIONS_API',
+      token,
+      transaction,
+      transaction.categoryId,
+      transaction.id,
+    );
+    if (res !== null) {
+      fetchAllCategories();
+      return true;
+    }
+    return false;
+  };
 
   useEffect(() => {
     fetchAllCategories();
@@ -159,6 +163,7 @@ const AppStack = ({token, handleToken}) => {
             reminders={reminders}
             addTransaction={addTransaction}
             deleteTransaction={deleteTransaction}
+            updateTransaction={updateTransaction}
           />
         )}
       </Drawer.Screen>

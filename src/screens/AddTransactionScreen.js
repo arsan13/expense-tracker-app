@@ -12,11 +12,13 @@ const AddTransactionScreen = ({
   categories,
   addTransaction,
 }) => {
+  // showFutureDates === true, reminder txn, else regular txn
   const showFutureDates = route.params.showFutureDates;
   let initialState = {
     amount: 0,
     note: '',
-    transactionDate: 0,
+    transactionDate: new Date().getTime(),
+    remind: false,
   };
   const [payload, setPayload] = useState(initialState);
   const [categoryId, setCategoryId] = useState(null);
@@ -44,7 +46,11 @@ const AddTransactionScreen = ({
       return;
     }
 
-    const isSuccessful = await addTransaction(payload, categoryId);
+    //To add a reminder txn
+    let payloadToSend = {...payload};
+    if (showFutureDates) payloadToSend.remind = true;
+
+    const isSuccessful = await addTransaction(payloadToSend, categoryId);
     if (isSuccessful) {
       setCategoryId(null);
       setPayload(initialState);
