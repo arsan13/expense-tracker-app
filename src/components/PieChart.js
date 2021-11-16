@@ -1,6 +1,7 @@
 import React from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 import Pie from 'react-native-pie';
+import {textColor} from '../utils/GlobalStyle';
 
 const PieChart = ({categories, total}) => {
   const rupeesSymbol = '\u20B9';
@@ -45,7 +46,7 @@ const styles = StyleSheet.create({
   },
   gaugeText: {
     backgroundColor: 'transparent',
-    color: 'gray',
+    color: textColor,
     fontSize: 24,
     fontWeight: '500',
   },

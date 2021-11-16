@@ -3,6 +3,7 @@ import {Button} from 'react-native';
 import {StyleSheet, Text, View, FlatList} from 'react-native';
 import Loading from '../components/Loading';
 import ReminderModal from '../components/ReminderModal';
+import {textColor} from '../utils/GlobalStyle';
 import {checkReminder} from '../utils/HandleExpenses';
 
 const ReminderScreen = ({
@@ -92,13 +93,19 @@ const ReminderScreen = ({
                   renderItem={({item}) => (
                     <View style={styles.dataItems}>
                       <View>
-                        <Text style={{fontSize: 15}}>{item.categoryName}</Text>
-                        <Text>
+                        <Text style={{color: textColor}}>
+                          {item.categoryName}
+                        </Text>
+                        <Text style={{color: textColor}}>
                           Date: {new Date(item.transactionDate).toDateString()}
                         </Text>
-                        <Text>Amount: {item.amount}</Text>
+                        <Text style={{color: textColor}}>
+                          Amount: {item.amount}
+                        </Text>
                         {item.note.trim() !== '' && (
-                          <Text>Note: {item.note}</Text>
+                          <Text style={{color: textColor}}>
+                            Note: {item.note}
+                          </Text>
                         )}
                       </View>
                       <View style={{justifyContent: 'center'}}>

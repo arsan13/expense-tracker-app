@@ -4,7 +4,7 @@ import moment from 'moment';
 import DatePicker from './DatePicker';
 import MonthYearPicker from './MonthYearPicker';
 import YearPicker from './YearPicker';
-import {primaryColor} from '../utils/GlobalStyle';
+import {primaryColor, textColor} from '../utils/GlobalStyle';
 
 const DateTypeSelection = ({sendDateToHome}) => {
   let date = new Date();
@@ -86,6 +86,7 @@ const styles = StyleSheet.create({
     marginVertical: 5,
   },
   optionText: {
+    color: textColor,
     fontSize: 16,
   },
   active: {
@@ -98,7 +99,7 @@ const styles = StyleSheet.create({
     alignContent: 'center',
   },
   selectedText: {
-    fontSize: 15,
+    color: textColor,
     alignSelf: 'center',
     marginVertical: 5,
     borderBottomWidth: 1,

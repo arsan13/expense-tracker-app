@@ -1,5 +1,6 @@
 import React from 'react';
 import {StyleSheet, Text, View} from 'react-native';
+import {textColor} from '../utils/GlobalStyle';
 
 const Card = ({item}) => {
   return (
@@ -58,6 +59,6 @@ const styles = StyleSheet.create({
     borderRadius: 18 / 2,
   },
   text: {
-    fontSize: 15,
+    color: textColor,
   },
 });

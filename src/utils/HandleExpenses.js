@@ -1,5 +1,11 @@
 import moment from 'moment';
 
+// Make First letter of a letter capital letter
+const capitalize = str => {
+  const lower = str.toLowerCase();
+  return str.charAt(0).toUpperCase() + lower.slice(1);
+};
+
 // Total expense of each category
 const calculateTotalExpense = categories => {
   categories.map((item, index) => {
@@ -8,6 +14,7 @@ const calculateTotalExpense = categories => {
       total += subItem.amount;
     });
     categories[index].totalExpense = total;
+    categories[index].title = capitalize(item.title);
   });
   return categories;
 };
@@ -18,7 +25,7 @@ const getAllTransactions = categories => {
   categories.map((item, index) => {
     item.transactions.map((subItem, subIndex) => {
       subItem['categoryId'] = item.id;
-      subItem['categoryName'] = item.title;
+      subItem['categoryName'] = capitalize(item.title);
       data.push(subItem);
     });
   });

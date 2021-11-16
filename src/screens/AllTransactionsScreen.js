@@ -4,6 +4,7 @@ import DateTypeSelection from '../components/DateTypeSelection';
 import ExportToExcel from '../utils/ExportToExcel';
 import Loading from '../components/Loading';
 import moment from 'moment';
+import {textColor} from '../utils/GlobalStyle';
 
 const AllTransactionsScreen = ({route, allTransactions, deleteTransaction}) => {
   const [transactions, setTransactions] = useState([]);
@@ -120,12 +121,16 @@ const AllTransactionsScreen = ({route, allTransactions, deleteTransaction}) => {
               renderItem={({item}) => (
                 <View style={styles.dataItems}>
                   <View>
-                    <Text style={{fontSize: 15}}>{item.categoryName}</Text>
-                    <Text>
+                    <Text style={{color: textColor}}>{item.categoryName}</Text>
+                    <Text style={{color: textColor}}>
                       Date: {new Date(item.transactionDate).toDateString()}
                     </Text>
-                    <Text>Amount: {item.amount}</Text>
-                    {item.note.trim() !== '' && <Text>Note: {item.note}</Text>}
+                    <Text style={{color: textColor}}>
+                      Amount: {item.amount}
+                    </Text>
+                    {item.note.trim() !== '' && (
+                      <Text style={{color: textColor}}>Note: {item.note}</Text>
+                    )}
                   </View>
                   <View style={{justifyContent: 'center'}}>
                     <Button

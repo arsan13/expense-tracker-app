@@ -16,19 +16,11 @@ import {
 } from '../utils/HandleExpenses';
 import Card from '../components/Card';
 import PieChart from '../components/PieChart';
+import {categoryColors} from '../utils/GlobalStyle';
 
 const HomeScreen = ({handleToken, allCategories, navigation}) => {
   const [categories, setCategories] = useState([]);
   const [total, setTotal] = useState(0);
-  const colors = [
-    '#EBD22F',
-    '#44CD40',
-    '#C70039',
-    '#404FCD',
-    '#1e90ff',
-    '#ff7f50',
-    '#6a5acd',
-  ];
 
   const handleDateFilter = (type, value) => {
     if (allCategories === null) {
@@ -40,7 +32,7 @@ const HomeScreen = ({handleToken, allCategories, navigation}) => {
     let total = netExpense(filteredCategories);
     filteredCategories = filteredCategories.map((item, index) => {
       item.percentage = Math.round((item.totalExpense / total) * 100);
-      item.color = colors[index];
+      item.color = categoryColors[index % categoryColors.length];
       return item;
     });
     setCategories(filteredCategories);
