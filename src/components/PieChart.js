@@ -35,7 +35,7 @@ const styles = StyleSheet.create({
   container: {
     width: 175,
     alignItems: 'center',
-    marginBottom: 10,
+    // marginTop: 10,
   },
   gauge: {
     position: 'absolute',

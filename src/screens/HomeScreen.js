@@ -1,12 +1,6 @@
 import React, {useState, useEffect} from 'react';
-import {
-  Button,
-  FlatList,
-  StyleSheet,
-  Text,
-  View,
-  TouchableOpacity,
-} from 'react-native';
+import {FlatList, StyleSheet, Text, View, TouchableOpacity} from 'react-native';
+import {Button} from 'react-native-paper';
 import DateTypeSelection from '../components/DateTypeSelection';
 import ErrorScreen from './ErrorScreen';
 import {
@@ -16,7 +10,7 @@ import {
 } from '../utils/HandleExpenses';
 import Card from '../components/Card';
 import PieChart from '../components/PieChart';
-import {categoryColors} from '../utils/GlobalStyle';
+import {categoryColors, primaryColor, textColor} from '../utils/GlobalStyle';
 
 const HomeScreen = ({handleToken, allCategories, navigation}) => {
   const [categories, setCategories] = useState([]);
@@ -47,6 +41,12 @@ const HomeScreen = ({handleToken, allCategories, navigation}) => {
     });
   };
 
+  const handleButtonPress = () => {
+    navigation.navigate('AddTransactionScreen', {
+      showFutureDates: false,
+    });
+  };
+
   useEffect(() => {
     handleDateFilter('Month', new Date());
   }, [allCategories]);
@@ -60,16 +60,16 @@ const HomeScreen = ({handleToken, allCategories, navigation}) => {
           <View style={styles.dateContainer}>
             <DateTypeSelection sendDateToHome={handleDateFilter} />
           </View>
-          <View style={styles.chart}>
+          <View style={styles.chartAndButton}>
             <PieChart categories={categories} total={total} />
             <Button
-              title="Add Transaction"
-              onPress={() => {
-                navigation.navigate('AddTransactionScreen', {
-                  showFutureDates: false,
-                });
-              }}
-            />
+              icon="plus-thick"
+              color={primaryColor}
+              mode="contained"
+              style={{width: '90%', padding: 2}}
+              onPress={handleButtonPress}>
+              Add Transaction
+            </Button>
           </View>
           <View style={styles.dataContainer}>
             <FlatList
@@ -96,17 +96,17 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   dateContainer: {
-    flex: 1,
+    flex: 2,
     backgroundColor: '#fff',
     marginHorizontal: 10,
     marginTop: 15,
     borderRadius: 10,
     paddingHorizontal: 10,
-    paddingBottom: 10,
+    // paddingBottom: 10,
   },
-  chart: {
-    flex: 4,
-    justifyContent: 'center',
+  chartAndButton: {
+    flex: 7,
+    justifyContent: 'space-evenly',
     alignItems: 'center',
     backgroundColor: '#fff',
     marginHorizontal: 10,
@@ -114,7 +114,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   dataContainer: {
-    flex: 4,
+    flex: 8,
     marginHorizontal: 10,
     marginTop: 8,
   },

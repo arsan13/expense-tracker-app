@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
 import {StyleSheet, Text, View} from 'react-native';
+import {textColor} from '../utils/GlobalStyle';
 
 const YearPicker = ({handleSelectDate}) => {
   let presentYear = new Date().getFullYear();
@@ -43,8 +44,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   text: {
-    fontSize: 15,
-    // paddingVertical: 5,
+    color: textColor,
     paddingHorizontal: 10,
   },
 });

@@ -79,11 +79,12 @@ export default DateTypeSelection;
 const styles = StyleSheet.create({
   container: {
     padding: 10,
+    justifyContent: 'space-evenly',
   },
   options: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginVertical: 5,
+    // marginVertical: 5,
   },
   optionText: {
     color: textColor,
@@ -97,11 +98,11 @@ const styles = StyleSheet.create({
   },
   selected: {
     alignContent: 'center',
+    marginTop: 15,
   },
   selectedText: {
     color: textColor,
     alignSelf: 'center',
-    marginVertical: 5,
     borderBottomWidth: 1,
   },
 });

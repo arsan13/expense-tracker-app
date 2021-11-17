@@ -12,7 +12,9 @@ const MonthYearPicker = ({handleSelectDate}) => {
     handleSelectDate(currentDate);
   };
 
-  return <>{show && <MonthPicker value={date} onChange={onChange} />}</>;
+  return (
+    <>{show && <MonthPicker value={date} mode="short" onChange={onChange} />}</>
+  );
 };
 
 export default MonthYearPicker;
