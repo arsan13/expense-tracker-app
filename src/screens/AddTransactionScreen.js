@@ -58,7 +58,7 @@ const AddTransactionScreen = ({
       setIsLoading(false);
       navigation.goBack();
     } else {
-      setErrMsg('Error adding transaction. Try again');
+      setErrMsg('Error adding transaction. Please try again later.');
       setIsLoading(false);
     }
   };

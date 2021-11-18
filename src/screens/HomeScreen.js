@@ -2,7 +2,6 @@ import React, {useState, useEffect} from 'react';
 import {FlatList, StyleSheet, Text, View, TouchableOpacity} from 'react-native';
 import {Button} from 'react-native-paper';
 import DateTypeSelection from '../components/DateTypeSelection';
-import ErrorScreen from './ErrorScreen';
 import {
   getAllTransactions,
   netExpense,
@@ -52,39 +51,33 @@ const HomeScreen = ({handleToken, allCategories, navigation}) => {
   }, [allCategories]);
 
   return (
-    <>
-      {categories === null ? (
-        <ErrorScreen handleToken={handleToken} />
-      ) : (
-        <View style={styles.container}>
-          <View style={styles.dateContainer}>
-            <DateTypeSelection sendDateToHome={handleDateFilter} />
-          </View>
-          <View style={styles.chartAndButton}>
-            <PieChart categories={categories} total={total} />
-            <Button
-              icon="plus-thick"
-              color={primaryColor}
-              mode="contained"
-              style={{width: '90%', padding: 2}}
-              onPress={handleButtonPress}>
-              Add Transaction
-            </Button>
-          </View>
-          <View style={styles.dataContainer}>
-            <FlatList
-              data={categories}
-              keyExtractor={item => item.id}
-              renderItem={({item}) => (
-                <TouchableOpacity onPress={() => handleCategoryPress(item)}>
-                  <Card item={item} />
-                </TouchableOpacity>
-              )}
-            />
-          </View>
-        </View>
-      )}
-    </>
+    <View style={styles.container}>
+      <View style={styles.dateContainer}>
+        <DateTypeSelection sendDateToHome={handleDateFilter} />
+      </View>
+      <View style={styles.chartAndButton}>
+        <PieChart categories={categories} total={total} />
+        <Button
+          icon="plus-thick"
+          color={primaryColor}
+          mode="contained"
+          style={{width: '90%', padding: 2}}
+          onPress={handleButtonPress}>
+          Add Transaction
+        </Button>
+      </View>
+      <View style={styles.dataContainer}>
+        <FlatList
+          data={categories}
+          keyExtractor={item => item.id}
+          renderItem={({item}) => (
+            <TouchableOpacity onPress={() => handleCategoryPress(item)}>
+              <Card item={item} />
+            </TouchableOpacity>
+          )}
+        />
+      </View>
+    </View>
   );
 };
 

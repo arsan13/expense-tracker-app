@@ -12,6 +12,7 @@ import AllTransactionsScreen from '../screens/AllTransactionsScreen';
 import ChartScreen from '../screens/ChartScreen';
 import HomeStack from './HomeStack';
 import ReminderStack from './ReminderStack';
+import {Alert} from 'react-native';
 
 const Drawer = createDrawerNavigator();
 
@@ -23,10 +24,19 @@ const AppStack = ({token, handleToken}) => {
   //Read Categories
   const fetchAllCategories = async () => {
     let allData = await getService('CATEGORIES_API', token);
-    if (data === null) {
+    if (allData === null) {
       setCategories(null);
-      //Add alert
-      console.log('Internal Server Error');
+      Alert.alert(
+        'Internal Server Error!',
+        'You will be logged out. Please try to login later.',
+        [
+          {
+            text: 'Ok',
+            onPress: handleToken(''),
+          },
+        ],
+        {cancelable: true},
+      );
       return;
     }
     let tempTransactions = getAllTransactions(allData);

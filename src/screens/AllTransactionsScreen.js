@@ -84,8 +84,16 @@ const AllTransactionsScreen = ({route, allTransactions, deleteTransaction}) => {
     if (isDeleted) {
       setTransactions(transactions.filter(item => item.id !== transaction.id));
     } else {
-      //Add alert
-      console.log('Error deleting transaction');
+      Alert.alert(
+        'Error!',
+        'Problem deleting transaction. Please try again later.',
+        [
+          {
+            text: 'Ok',
+          },
+        ],
+        {cancelable: true},
+      );
     }
     setIsLoading(false);
   };

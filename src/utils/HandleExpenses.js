@@ -1,6 +1,6 @@
 import moment from 'moment';
 
-// Make First letter of a letter capital letter
+// Make First letter of a word capital letter
 const capitalize = str => {
   const lower = str.toLowerCase();
   return str.charAt(0).toUpperCase() + lower.slice(1);

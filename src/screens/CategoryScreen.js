@@ -56,8 +56,16 @@ const CategoryScreen = ({
   const handleDelete = async id => {
     const isDeleted = await deleteCategory(id);
     if (isDeleted === false) {
-      //Add alert
-      console.log('Problem deleting category');
+      Alert.alert(
+        'Error!',
+        'Problem deleting category. Please try again later.',
+        [
+          {
+            text: 'Ok',
+          },
+        ],
+        {cancelable: true},
+      );
     }
   };
 
