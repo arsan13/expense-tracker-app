@@ -114,7 +114,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   dataContainer: {
-    flex: 8,
+    flex: 7,
     marginHorizontal: 10,
     marginTop: 8,
   },

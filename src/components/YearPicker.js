@@ -23,7 +23,7 @@ const YearPicker = ({handleSelectDate}) => {
       </Text>
       <Text style={styles.text}>{year}</Text>
       {presentYear === year ? (
-        <Text style={styles.text}>{'>'}</Text>
+        <Text style={[styles.text, {color: '#fff'}]}>{'>'}</Text>
       ) : (
         <Text style={styles.text} onPress={handleNext}>
           {'>'}
