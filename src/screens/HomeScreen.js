@@ -9,9 +9,9 @@ import {
 } from '../utils/HandleExpenses';
 import Card from '../components/Card';
 import PieChart from '../components/PieChart';
-import {categoryColors, primaryColor, textColor} from '../utils/GlobalStyle';
+import {categoryColors, primaryColor} from '../utils/GlobalStyle';
 
-const HomeScreen = ({handleToken, allCategories, navigation}) => {
+const HomeScreen = ({allCategories, navigation}) => {
   const [categories, setCategories] = useState([]);
   const [total, setTotal] = useState(0);
 
