@@ -9,7 +9,7 @@ import {
 } from '../utils/HandleExpenses';
 import Card from '../components/Card';
 import PieChart from '../components/PieChart';
-import {categoryColors, primaryColor} from '../utils/GlobalStyle';
+import {primaryColor} from '../utils/GlobalStyle';
 
 const HomeScreen = ({allCategories, navigation}) => {
   const [categories, setCategories] = useState([]);
@@ -25,7 +25,6 @@ const HomeScreen = ({allCategories, navigation}) => {
     let total = netExpense(filteredCategories);
     filteredCategories = filteredCategories.map((item, index) => {
       item.percentage = Math.round((item.totalExpense / total) * 100);
-      item.color = categoryColors[index % categoryColors.length];
       return item;
     });
     setCategories(filteredCategories);

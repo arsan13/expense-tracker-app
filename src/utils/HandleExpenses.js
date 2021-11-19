@@ -1,4 +1,5 @@
 import moment from 'moment';
+import {categoryColors} from './GlobalStyle';
 
 // Make First letter of a word capital letter
 const capitalize = str => {
@@ -6,7 +7,7 @@ const capitalize = str => {
   return str.charAt(0).toUpperCase() + lower.slice(1);
 };
 
-// Total expense of each category
+// Calculate total expense, capitalize title and add color field for each category
 const calculateTotalExpense = categories => {
   categories.map((item, index) => {
     let total = 0;
@@ -15,6 +16,7 @@ const calculateTotalExpense = categories => {
     });
     categories[index].totalExpense = total;
     categories[index].title = capitalize(item.title);
+    categories[index].color = categoryColors[index % categoryColors.length];
   });
   return categories;
 };

@@ -1,6 +1,7 @@
 import {StyleSheet} from 'react-native';
 
 export const primaryColor = '#03707a';
+export const secondaryColor = '#13b3c2';
 export const textColor = 'black';
 export const globalStyle = StyleSheet.create({
   error: {
@@ -12,12 +13,12 @@ export const globalStyle = StyleSheet.create({
 export const categoryColors = [
   '#FBD92F',
   '#44CD40',
-  '#C70039',
+  '#ff7f50',
   '#404FCD',
   '#1e90ff',
-  '#ff7f50',
-  '#5a5acd',
   '#9a5acd',
+  '#C70039',
+  '#5a5acd',
   '#AFF92F',
   '#aa7f50',
 ];
