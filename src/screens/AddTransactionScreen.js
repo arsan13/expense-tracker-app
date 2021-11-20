@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {FlatList, StyleSheet, Text, View, TextInput} from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
@@ -91,6 +91,11 @@ const AddTransactionScreen = ({
     return true;
   };
 
+  useEffect(() => {
+    setCategoryId(null);
+    setPayload(initialState);
+  }, [categories]);
+
   return (
     <View>
       {isLoading ? (
@@ -153,6 +158,18 @@ const AddTransactionScreen = ({
             )}
             ListFooterComponent={
               <>
+                {!showFutureDates && (
+                  <TouchableOpacity
+                    onPress={() => navigation.navigate('CategoryScreen')}
+                    style={
+                      // styles.categoryBox,
+                      styles.addCategoryBox
+                    }>
+                    <Text style={[styles.categoryText, {color: '#fff'}]}>
+                      + Create
+                    </Text>
+                  </TouchableOpacity>
+                )}
                 <View style={{marginVertical: 10}}>
                   <Text style={styles.heading}>Date</Text>
                   <View style={styles.dateContainer}>
@@ -272,6 +289,13 @@ const styles = StyleSheet.create({
     marginVertical: 5,
     width: 85,
     backgroundColor: '#fff',
+  },
+  addCategoryBox: {
+    borderRadius: 10,
+    marginVertical: 5,
+    justifyContent: 'center',
+    padding: 2,
+    backgroundColor: 'grey',
   },
   categoryText: {
     color: textColor,

@@ -4,12 +4,16 @@ import HomeScreen from '../screens/HomeScreen';
 import AddTransactionScreen from '../screens/AddTransactionScreen';
 import DrawerIcon from '../components/DrawerIcon';
 import AllTransactionsScreen from '../screens/AllTransactionsScreen';
+import CategoryScreen from '../screens/CategoryScreen';
 
 const Stack = createNativeStackNavigator();
 
 const HomeStack = ({
   handleToken,
   categories,
+  addCategory,
+  deleteCategory,
+  updateCategory,
   addTransaction,
   deleteTransaction,
 }) => {
@@ -38,6 +42,17 @@ const HomeStack = ({
           <AddTransactionScreen
             categories={categories}
             addTransaction={addTransaction}
+            {...props}
+          />
+        )}
+      </Stack.Screen>
+      <Stack.Screen name="CategoryScreen" options={{title: 'Add Category'}}>
+        {props => (
+          <CategoryScreen
+            categories={categories}
+            addCategory={addCategory}
+            updateCategory={updateCategory}
+            deleteCategory={deleteCategory}
             {...props}
           />
         )}

@@ -51,7 +51,7 @@ const AppStack = ({token, handleToken}) => {
   const addCategory = async category => {
     const data = await postService('CATEGORIES_API', token, category);
     if (data !== null) {
-      setCategories([...categories, data]);
+      fetchAllCategories();
       return true;
     }
     return false;
@@ -143,6 +143,9 @@ const AppStack = ({token, handleToken}) => {
           <HomeStack
             handleToken={handleToken}
             categories={categories}
+            addCategory={addCategory}
+            updateCategory={updateCategory}
+            deleteCategory={deleteCategory}
             addTransaction={addTransaction}
             deleteTransaction={deleteTransaction}
           />
