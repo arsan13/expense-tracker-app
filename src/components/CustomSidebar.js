@@ -10,13 +10,12 @@ import {
 import {Drawer} from 'react-native-paper';
 import {DrawerContentScrollView, DrawerItem} from '@react-navigation/drawer';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import {primaryColor} from '../utils/GlobalStyle';
 
 const CustomSidebar = ({handleToken, ...props}) => {
   return (
     <SafeAreaView style={styles.container}>
       <Image
-        source={require('../../assets/images/logo.png')}
+        source={require('../assets/images/logo.png')}
         style={styles.logo}
       />
       {/* <DrawerContentScrollView {...props}>
