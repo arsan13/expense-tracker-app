@@ -1,13 +1,7 @@
 import React, {useState} from 'react';
-import {
-  Alert,
-  Modal,
-  StyleSheet,
-  Text,
-  Pressable,
-  View,
-  Button,
-} from 'react-native';
+import {Modal, StyleSheet, Text, View} from 'react-native';
+import {Button} from 'react-native-paper';
+import {primaryColor, textColor} from '../utils/GlobalStyle';
 
 const ReminderModal = ({item, handleReminderClick}) => {
   const [modalVisible, setModalVisible] = useState(true);
@@ -22,11 +16,31 @@ const ReminderModal = ({item, handleReminderClick}) => {
       <Modal animationType="fade" transparent={true} visible={modalVisible}>
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
-            <Text style={styles.modalText}>{item.categoryName}</Text>
-            <Text style={styles.modalText}>{item.note}</Text>
-            <Text style={styles.modalText}>{item.amount}</Text>
-            <Button title="Pay" onPress={() => handleClick('Pay')} />
-            <Button title="Decline" onPress={() => handleClick('Decline')} />
+            <View style={styles.content}>
+              <Text style={styles.amount}>
+                {'\u20B9'}
+                {item.amount}
+              </Text>
+              <Text style={styles.modalText}>
+                {item.categoryName} - {item.note}
+              </Text>
+            </View>
+            <View style={styles.buttonContainer}>
+              <Button
+                color={primaryColor}
+                mode="contained"
+                style={[styles.button, {borderBottomLeftRadius: 20}]}
+                onPress={() => handleClick('Pay')}>
+                Pay
+              </Button>
+              <Button
+                color={primaryColor}
+                mode="contained"
+                style={[styles.button, {borderBottomRightRadius: 20}]}
+                onPress={() => handleClick('Decline')}>
+                Decline
+              </Button>
+            </View>
           </View>
         </View>
       </Modal>
@@ -45,7 +59,6 @@ const styles = StyleSheet.create({
     margin: 20,
     backgroundColor: 'white',
     borderRadius: 20,
-    padding: 35,
     alignItems: 'center',
     shadowColor: '#000',
     shadowOffset: {
@@ -56,9 +69,27 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 5,
   },
+  content: {
+    padding: 25,
+  },
   modalText: {
-    marginBottom: 15,
     textAlign: 'center',
+    color: textColor,
+    fontSize: 18,
+  },
+  amount: {
+    fontSize: 35,
+    marginBottom: 10,
+    textAlign: 'center',
+    color: textColor,
+    fontWeight: 'bold',
+  },
+  buttonContainer: {
+    flexDirection: 'row',
+  },
+  button: {
+    width: '35%',
+    borderRadius: 0,
   },
 });
 

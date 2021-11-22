@@ -4,7 +4,6 @@ import {StyleSheet, Text, View, FlatList} from 'react-native';
 import Loading from '../components/Loading';
 import ReminderModal from '../components/ReminderModal';
 import {textColor} from '../utils/GlobalStyle';
-import {checkReminder} from '../utils/HandleExpenses';
 
 const ReminderScreen = ({
   navigation,
