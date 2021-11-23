@@ -144,7 +144,7 @@ const AddTransactionScreen = ({
                 style={[
                   styles.categoryBox,
                   {borderColor: item.color},
-                  (index === 0 || index % 3 !== 0) && {marginRight: 10},
+                  (index + 1) % 4 !== 0 && {marginRight: 10},
                   categoryId === item.id && {backgroundColor: item.color},
                 ]}>
                 {item.title.length > 10 ? (
