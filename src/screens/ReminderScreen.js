@@ -77,14 +77,6 @@ const ReminderScreen = ({
             />
           ) : (
             <View>
-              <View style={{marginVertical: 10}}>
-                <Button
-                  title="Add Reminder"
-                  onPress={() => {
-                    navigation.navigate('AddReminder', {showFutureDates: true});
-                  }}
-                />
-              </View>
               <View style={styles.dataContainer}>
                 <FlatList
                   data={data}

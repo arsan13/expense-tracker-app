@@ -3,6 +3,8 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import DrawerIcon from '../components/DrawerIcon';
 import ReminderScreen from '../screens/ReminderScreen';
 import AddTransactionScreen from '../screens/AddTransactionScreen';
+import Icon from 'react-native-vector-icons/AntDesign';
+import {primaryColor} from '../utils/GlobalStyle';
 
 const Stack = createNativeStackNavigator();
 
@@ -21,6 +23,16 @@ const ReminderStack = ({
           return {
             title: 'Reminders',
             headerLeft: () => <DrawerIcon navigation={navigation} />,
+            headerRight: () => (
+              <Icon
+                name="pluscircleo"
+                size={25}
+                color={primaryColor}
+                onPress={() => {
+                  navigation.navigate('AddReminder', {showFutureDates: true});
+                }}
+              />
+            ),
           };
         }}>
         {props => (

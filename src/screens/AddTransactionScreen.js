@@ -30,7 +30,9 @@ const AddTransactionScreen = ({
 
   const today = new Date();
   let yesterday = new Date();
-  yesterday.setDate(yesterday.getDate() - 1);
+  let tomorrow = new Date();
+  yesterday.setDate(today.getDate() - 1);
+  tomorrow.setDate(today.getDate() + 1);
 
   const [payload, setPayload] = useState(initialState);
   const [categoryId, setCategoryId] = useState(null);
@@ -174,43 +176,67 @@ const AddTransactionScreen = ({
                   <Text style={styles.heading}>Date</Text>
                   <View style={styles.dateContainer}>
                     <View style={styles.dateBoxes}>
-                      <TouchableOpacity
-                        onPress={() => handleSelectDate(today)}
-                        style={[
-                          styles.dateBox,
-                          selectedDate.toLocaleDateString() ===
-                            today.toLocaleDateString() && {
-                            backgroundColor: secondaryColor,
-                          },
-                        ]}>
-                        <View style={styles.textContainer}>
-                          <Text style={styles.dateText}>
-                            {dateToString(today)}
-                          </Text>
-                          <Text style={styles.dateText}>Today</Text>
-                        </View>
-                      </TouchableOpacity>
-                      <TouchableOpacity
-                        onPress={() => handleSelectDate(yesterday)}
-                        style={[
-                          styles.dateBox,
-                          {marginHorizontal: 30},
-                          selectedDate.toLocaleDateString() ===
-                            yesterday.toLocaleDateString() && {
-                            backgroundColor: secondaryColor,
-                          },
-                        ]}>
-                        <View style={styles.textContainer}>
-                          <Text style={styles.dateText}>
-                            {dateToString(yesterday)}
-                          </Text>
-                          <Text style={styles.dateText}>Yes'day</Text>
-                        </View>
-                      </TouchableOpacity>
+                      {showFutureDates ? (
+                        <TouchableOpacity
+                          onPress={() => handleSelectDate(tomorrow)}
+                          style={[
+                            styles.dateBox,
+                            {marginRight: 30},
+                            selectedDate.toLocaleDateString() ===
+                              tomorrow.toLocaleDateString() && {
+                              backgroundColor: secondaryColor,
+                            },
+                          ]}>
+                          <View style={styles.textContainer}>
+                            <Text style={styles.dateText}>
+                              {dateToString(tomorrow)}
+                            </Text>
+                            <Text style={styles.dateText}>TMR</Text>
+                          </View>
+                        </TouchableOpacity>
+                      ) : (
+                        <>
+                          <TouchableOpacity
+                            onPress={() => handleSelectDate(today)}
+                            style={[
+                              styles.dateBox,
+                              selectedDate.toLocaleDateString() ===
+                                today.toLocaleDateString() && {
+                                backgroundColor: secondaryColor,
+                              },
+                            ]}>
+                            <View style={styles.textContainer}>
+                              <Text style={styles.dateText}>
+                                {dateToString(today)}
+                              </Text>
+                              <Text style={styles.dateText}>Today</Text>
+                            </View>
+                          </TouchableOpacity>
+                          <TouchableOpacity
+                            onPress={() => handleSelectDate(yesterday)}
+                            style={[
+                              styles.dateBox,
+                              {marginHorizontal: 30},
+                              selectedDate.toLocaleDateString() ===
+                                yesterday.toLocaleDateString() && {
+                                backgroundColor: secondaryColor,
+                              },
+                            ]}>
+                            <View style={styles.textContainer}>
+                              <Text style={styles.dateText}>
+                                {dateToString(yesterday)}
+                              </Text>
+                              <Text style={styles.dateText}>Yes'day</Text>
+                            </View>
+                          </TouchableOpacity>
+                        </>
+                      )}
                       {selectedDate.toLocaleDateString() !==
                         today.toLocaleDateString() &&
                         selectedDate.toLocaleDateString() !==
-                          yesterday.toLocaleDateString() && (
+                          yesterday.toLocaleDateString() &&
+                        selectedDate.toLocaleDateString() !==
+                          tomorrow.toLocaleDateString() && (
                           <TouchableOpacity
                             style={[
                               styles.dateBox,
