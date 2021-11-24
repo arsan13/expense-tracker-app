@@ -42,8 +42,16 @@ const ReminderScreen = ({
       transaction.id,
     );
     if (!isDeleted) {
-      //Add alert
-      console.log('Error deleting transaction');
+      Alert.alert(
+        'Unsuccessful!',
+        'Error deleting transaction. Please try again later',
+        [
+          {
+            text: 'Ok',
+          },
+        ],
+        {cancelable: true},
+      );
     }
     setIsLoading(false);
   };
@@ -54,7 +62,6 @@ const ReminderScreen = ({
     transaction.remind = false;
     const isUpdated = await updateTransaction(transaction);
     if (!isUpdated) {
-      //Add alert
       console.log('Error updating transaction');
     }
     setIsLoading(false);

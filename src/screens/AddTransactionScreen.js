@@ -55,6 +55,19 @@ const AddTransactionScreen = ({
     setPayload({...payload, transactionDate: inDate.getTime()});
   };
 
+  const isSelectedDateVisible = () => {
+    if (showFutureDates)
+      return (
+        selectedDate.toLocaleDateString() !== yesterday.toLocaleDateString() &&
+        selectedDate.toLocaleDateString() !== tomorrow.toLocaleDateString()
+      );
+    return (
+      selectedDate.toLocaleDateString() !== today.toLocaleDateString() &&
+      selectedDate.toLocaleDateString() !== yesterday.toLocaleDateString() &&
+      selectedDate.toLocaleDateString() !== tomorrow.toLocaleDateString()
+    );
+  };
+
   const handleSubmit = async () => {
     setIsLoading(true);
 
@@ -119,15 +132,10 @@ const AddTransactionScreen = ({
                   }}>
                   <TextInput
                     // value={payload.amount.toString()}
-                    style={{
-                      backgroundColor: '#fff',
-                      width: 100,
-                      borderBottomWidth: 2,
-                      fontSize: 20,
-                      textAlign: 'center',
-                    }}
+                    style={styles.amountField}
                     autoFocus={true}
                     placeholder="INR"
+                    placeholderTextColor={textColor}
                     keyboardType="numeric"
                     onChangeText={text => handleChange('amount', text)}
                   />
@@ -140,13 +148,13 @@ const AddTransactionScreen = ({
             numColumns={4}
             data={categories}
             keyExtractor={item => item.id}
+            columnWrapperStyle={{flex: 1, justifyContent: 'space-evenly'}}
             renderItem={({item, index}) => (
               <TouchableOpacity
                 onPress={() => setCategoryId(item.id)}
                 style={[
                   styles.categoryBox,
                   {borderColor: item.color},
-                  (index + 1) % 4 !== 0 && {marginRight: 10},
                   categoryId === item.id && {backgroundColor: item.color},
                 ]}>
                 {item.title.length > 10 ? (
@@ -231,25 +239,20 @@ const AddTransactionScreen = ({
                           </TouchableOpacity>
                         </>
                       )}
-                      {selectedDate.toLocaleDateString() !==
-                        today.toLocaleDateString() &&
-                        selectedDate.toLocaleDateString() !==
-                          yesterday.toLocaleDateString() &&
-                        selectedDate.toLocaleDateString() !==
-                          tomorrow.toLocaleDateString() && (
-                          <TouchableOpacity
-                            style={[
-                              styles.dateBox,
-                              {backgroundColor: secondaryColor},
-                            ]}>
-                            <View style={styles.textContainer}>
-                              <Text style={styles.dateText}>
-                                {dateToString(selectedDate)}
-                              </Text>
-                              <Text style={styles.dateText}>Selected</Text>
-                            </View>
-                          </TouchableOpacity>
-                        )}
+                      {isSelectedDateVisible() && (
+                        <TouchableOpacity
+                          style={[
+                            styles.dateBox,
+                            {backgroundColor: secondaryColor},
+                          ]}>
+                          <View style={styles.textContainer}>
+                            <Text style={styles.dateText}>
+                              {dateToString(selectedDate)}
+                            </Text>
+                            <Text style={styles.dateText}>Selected</Text>
+                          </View>
+                        </TouchableOpacity>
+                      )}
                     </View>
                     <TouchableOpacity
                       style={styles.calendarIcon}
@@ -276,6 +279,7 @@ const AddTransactionScreen = ({
                     value={payload.note}
                     style={styles.note}
                     placeholder="Comment"
+                    placeholderTextColor={textColor}
                     onChangeText={text => handleChange('note', text)}
                   />
                 </View>
@@ -308,6 +312,14 @@ const styles = StyleSheet.create({
     fontSize: 18,
     marginBottom: 5,
     fontWeight: '500',
+  },
+  amountField: {
+    backgroundColor: '#fff',
+    width: 100,
+    borderBottomWidth: 2,
+    fontSize: 20,
+    textAlign: 'center',
+    color: textColor,
   },
   categoryBox: {
     borderWidth: 1,
@@ -360,6 +372,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     borderColor: 'grey',
     backgroundColor: '#fff',
+    color: textColor,
   },
   addButton: {
     padding: 5,
