@@ -1,16 +1,10 @@
 import React, {useEffect, useState} from 'react';
-import {Button} from 'react-native';
 import {StyleSheet, Text, View, FlatList} from 'react-native';
 import Loading from '../components/Loading';
 import ReminderModal from '../components/ReminderModal';
 import {textColor} from '../utils/GlobalStyle';
 
-const ReminderScreen = ({
-  navigation,
-  reminders,
-  deleteTransaction,
-  updateTransaction,
-}) => {
+const ReminderScreen = ({reminders, deleteTransaction, updateTransaction}) => {
   const [reminderItem, setReminderItem] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [data, setData] = useState([]);
@@ -71,6 +65,22 @@ const ReminderScreen = ({
     handleReminder();
   }, [reminders]);
 
+  const renderItem = ({item}) => (
+    <View style={{marginVertical: 10}}>
+      <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+        <Text style={styles.text}>
+          Rs{item.amount} on {new Date(item.transactionDate).toDateString()}
+        </Text>
+        <Text style={styles.text}>U</Text>
+      </View>
+      <View>
+        <Text style={styles.text}>
+          {item.categoryName}({item.note})
+        </Text>
+      </View>
+    </View>
+  );
+
   return (
     <>
       {isLoading ? (
@@ -83,42 +93,65 @@ const ReminderScreen = ({
               handleReminderClick={handleReminderClick}
             />
           ) : (
-            <View>
-              <View style={styles.dataContainer}>
-                <FlatList
-                  data={data}
-                  keyExtractor={item => item.id}
-                  renderItem={({item}) => (
-                    <View style={styles.dataItems}>
-                      <View>
-                        <Text style={{color: textColor}}>
-                          {item.categoryName}
-                        </Text>
-                        <Text style={{color: textColor}}>
-                          Date: {new Date(item.transactionDate).toDateString()}
-                        </Text>
-                        <Text style={{color: textColor}}>
-                          Amount: {item.amount}
-                        </Text>
-                        {item.note.trim() !== '' && (
-                          <Text style={{color: textColor}}>
-                            Note: {item.note}
-                          </Text>
-                        )}
-                      </View>
-                      <View style={{justifyContent: 'center'}}>
-                        <Button
-                          title="Delete"
-                          onPress={() => {
-                            handleDelete(item);
-                          }}
-                        />
-                      </View>
-                      {/* <View style={{borderBottomWidth: 1, marginTop: 10}} /> */}
-                    </View>
-                  )}
-                />
-              </View>
+            <View style={{padding: 10}}>
+              <FlatList
+                data={data}
+                keyExtractor={item => item.id}
+                renderItem={renderItem}
+                // renderItem={({item}) => (
+                // <View style={styles.dataItems}>
+                //   <View>
+                //     <Text style={{color: textColor}}>
+                //       {item.categoryName}
+                //     </Text>
+                //   <View>
+                //     <Text style={{color: textColor}}>
+                //       {item.categoryName}
+                //     </Text>
+                //     <Text style={{color: textColor}}>
+                //       Date: {new Date(item.transactionDate).toDateString()}
+                //     </Text>
+                //     <Text style={{color: textColor}}>
+                //       Amount: {item.amount}
+                //     </Text>
+                //     {item.note.trim() !== '' && (
+                //       <Text style={{color: textColor}}>
+                //         Note: {item.note}
+                //       </Text>
+                //     )}
+                //   </View>
+                //   <View style={{justifyContent: 'center'}}>
+                //     <Button
+                //       title="Delete"
+                //       onPress={() => {
+                //         handleDelete(item);
+                //       }}
+                //     />
+                //   </View>
+                // </View>
+                //     <Text style={{color: textColor}}>
+                //       Date: {new Date(item.transactionDate).toDateString()}
+                //     </Text>
+                //     <Text style={{color: textColor}}>
+                //       Amount: {item.amount}
+                //     </Text>
+                //     {item.note.trim() !== '' && (
+                //       <Text style={{color: textColor}}>
+                //         Note: {item.note}
+                //       </Text>
+                //     )}
+                //   </View>
+                //   <View style={{justifyContent: 'center'}}>
+                //     <Button
+                //       title="Delete"
+                //       onPress={() => {
+                //         handleDelete(item);
+                //       }}
+                //     />
+                //   </View>
+                // </View>
+                // )}
+              />
             </View>
           )}
         </>
@@ -130,13 +163,13 @@ const ReminderScreen = ({
 export default ReminderScreen;
 
 const styles = StyleSheet.create({
-  dataContainer: {
-    marginVertical: 10,
-  },
   dataItems: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginVertical: 5,
     marginHorizontal: 25,
+  },
+  text: {
+    color: textColor,
   },
 });

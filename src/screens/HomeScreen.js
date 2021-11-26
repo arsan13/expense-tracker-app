@@ -97,7 +97,7 @@ const styles = StyleSheet.create({
     // paddingBottom: 10,
   },
   chartAndButton: {
-    flex: 7,
+    flex: 6,
     justifyContent: 'space-evenly',
     alignItems: 'center',
     backgroundColor: '#fff',
@@ -106,9 +106,8 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   dataContainer: {
-    flex: 7,
-    marginHorizontal: 10,
-    marginTop: 8,
+    flex: 8,
+    margin: 10,
   },
   cardContent: {
     flexDirection: 'row',
