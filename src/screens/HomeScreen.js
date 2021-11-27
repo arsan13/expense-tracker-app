@@ -106,7 +106,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   dataContainer: {
-    flex: 8,
+    flex: 7,
     margin: 10,
   },
   cardContent: {

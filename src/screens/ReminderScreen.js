@@ -1,5 +1,7 @@
 import React, {useEffect, useState} from 'react';
-import {StyleSheet, Text, View, FlatList} from 'react-native';
+import {StyleSheet, Text, View, FlatList, TouchableOpacity} from 'react-native';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import moment from 'moment';
 import Loading from '../components/Loading';
 import ReminderModal from '../components/ReminderModal';
 import {textColor} from '../utils/GlobalStyle';
@@ -66,17 +68,25 @@ const ReminderScreen = ({reminders, deleteTransaction, updateTransaction}) => {
   }, [reminders]);
 
   const renderItem = ({item}) => (
-    <View style={{marginVertical: 10}}>
-      <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-        <Text style={styles.text}>
-          Rs{item.amount} on {new Date(item.transactionDate).toDateString()}
+    <View style={{marginTop: 15, paddingHorizontal: 10}}>
+      <Text style={styles.date}>
+        {moment(new Date(item.transactionDate)).format('MMMM DD, YYYY')}
+      </Text>
+      <View style={styles.card}>
+        <Text style={[styles.text, {flex: 3}]}>{item.categoryName}</Text>
+        <Text style={[styles.text, {flex: 1}]}>
+          {'\u20B9'} {item.amount}
         </Text>
-        <Text style={styles.text}>U</Text>
-      </View>
-      <View>
-        <Text style={styles.text}>
-          {item.categoryName}({item.note})
-        </Text>
+        <TouchableOpacity
+          style={{
+            flex: 1,
+            alignItems: 'flex-end',
+          }}
+          onPress={() => {
+            handleDelete(item);
+          }}>
+          <Icon name="delete" size={25} color="#D11A2A" />
+        </TouchableOpacity>
       </View>
     </View>
   );
@@ -93,66 +103,11 @@ const ReminderScreen = ({reminders, deleteTransaction, updateTransaction}) => {
               handleReminderClick={handleReminderClick}
             />
           ) : (
-            <View style={{padding: 10}}>
-              <FlatList
-                data={data}
-                keyExtractor={item => item.id}
-                renderItem={renderItem}
-                // renderItem={({item}) => (
-                // <View style={styles.dataItems}>
-                //   <View>
-                //     <Text style={{color: textColor}}>
-                //       {item.categoryName}
-                //     </Text>
-                //   <View>
-                //     <Text style={{color: textColor}}>
-                //       {item.categoryName}
-                //     </Text>
-                //     <Text style={{color: textColor}}>
-                //       Date: {new Date(item.transactionDate).toDateString()}
-                //     </Text>
-                //     <Text style={{color: textColor}}>
-                //       Amount: {item.amount}
-                //     </Text>
-                //     {item.note.trim() !== '' && (
-                //       <Text style={{color: textColor}}>
-                //         Note: {item.note}
-                //       </Text>
-                //     )}
-                //   </View>
-                //   <View style={{justifyContent: 'center'}}>
-                //     <Button
-                //       title="Delete"
-                //       onPress={() => {
-                //         handleDelete(item);
-                //       }}
-                //     />
-                //   </View>
-                // </View>
-                //     <Text style={{color: textColor}}>
-                //       Date: {new Date(item.transactionDate).toDateString()}
-                //     </Text>
-                //     <Text style={{color: textColor}}>
-                //       Amount: {item.amount}
-                //     </Text>
-                //     {item.note.trim() !== '' && (
-                //       <Text style={{color: textColor}}>
-                //         Note: {item.note}
-                //       </Text>
-                //     )}
-                //   </View>
-                //   <View style={{justifyContent: 'center'}}>
-                //     <Button
-                //       title="Delete"
-                //       onPress={() => {
-                //         handleDelete(item);
-                //       }}
-                //     />
-                //   </View>
-                // </View>
-                // )}
-              />
-            </View>
+            <FlatList
+              data={data}
+              keyExtractor={item => item.id}
+              renderItem={renderItem}
+            />
           )}
         </>
       )}
@@ -163,13 +118,21 @@ const ReminderScreen = ({reminders, deleteTransaction, updateTransaction}) => {
 export default ReminderScreen;
 
 const styles = StyleSheet.create({
-  dataItems: {
+  date: {
+    color: '#696969',
+    fontWeight: 'bold',
+    marginBottom: 3,
+  },
+  card: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginVertical: 5,
-    marginHorizontal: 25,
+    backgroundColor: '#fff',
+    borderRadius: 10,
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+    flex: 1,
   },
   text: {
     color: textColor,
+    alignSelf: 'center',
   },
 });
