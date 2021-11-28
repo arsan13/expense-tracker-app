@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import {Modal, StyleSheet, Text, View} from 'react-native';
 import {Button} from 'react-native-paper';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {primaryColor, textColor} from '../utils/GlobalStyle';
 
 const ReminderModal = ({item, handleReminderClick}) => {
@@ -16,14 +17,35 @@ const ReminderModal = ({item, handleReminderClick}) => {
       <Modal animationType="fade" transparent={true} visible={modalVisible}>
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
+            <Icon
+              size={20}
+              name="close-circle-outline"
+              onPress={() => handleClick('Close')}
+              style={styles.closeIcon}
+            />
             <View style={styles.content}>
               <Text style={styles.amount}>
                 {'\u20B9'}
                 {item.amount}
               </Text>
-              <Text style={styles.modalText}>
-                {item.categoryName} - {item.note}
-              </Text>
+              {item.categoryName.length <= 10 && item.note.length <= 10 ? (
+                <Text style={styles.modalText}>
+                  {item.categoryName} - {item.note}
+                </Text>
+              ) : (
+                <>
+                  <Text style={styles.modalText}>{item.categoryName}</Text>
+                  {item.note.length <= 20 ? (
+                    <Text style={[styles.modalText, {fontSize: 15}]}>
+                      {item.note}
+                    </Text>
+                  ) : (
+                    <Text style={[styles.modalText, {fontSize: 15}]}>
+                      {item.note}...
+                    </Text>
+                  )}
+                </>
+              )}
             </View>
             <View style={styles.buttonContainer}>
               <Button
@@ -69,13 +91,21 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 5,
   },
+  closeIcon: {
+    color: 'black',
+    alignSelf: 'flex-end',
+    paddingRight: 4,
+    paddingTop: 4,
+  },
   content: {
-    padding: 25,
+    paddingBottom: 20,
+    paddingHorizontal: 20,
   },
   modalText: {
     textAlign: 'center',
     color: textColor,
     fontSize: 18,
+    marginBottom: 5,
   },
   amount: {
     fontSize: 35,

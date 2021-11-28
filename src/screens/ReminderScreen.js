@@ -27,7 +27,7 @@ const ReminderScreen = ({reminders, deleteTransaction, updateTransaction}) => {
   const handleReminderClick = async text => {
     //If reminder txn is paid => update txn remind to false, else delete the txn
     if (text === 'Pay') await handleUpdate();
-    else await handleDelete(reminderItem);
+    else if (text === 'Decline') await handleDelete(reminderItem);
     setReminderItem(null);
   };
 
@@ -68,7 +68,9 @@ const ReminderScreen = ({reminders, deleteTransaction, updateTransaction}) => {
   }, [reminders]);
 
   const renderItem = ({item}) => (
-    <View style={{marginTop: 15, paddingHorizontal: 10}}>
+    <TouchableOpacity
+      style={{marginTop: 15, paddingHorizontal: 10}}
+      onPress={() => setReminderItem(item)}>
       <Text style={styles.date}>
         {moment(new Date(item.transactionDate)).format('MMMM DD, YYYY')}
       </Text>
@@ -88,7 +90,7 @@ const ReminderScreen = ({reminders, deleteTransaction, updateTransaction}) => {
           <Icon name="delete" size={25} color="#D11A2A" />
         </TouchableOpacity>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 
   return (
