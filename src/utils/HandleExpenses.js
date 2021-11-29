@@ -7,7 +7,16 @@ const capitalize = str => {
   return str.charAt(0).toUpperCase() + lower.slice(1);
 };
 
-// Calculate total expense, capitalize title and add color field for each category
+// Capitalize title and add color field for each category
+const handleCategories = categories => {
+  categories.map((item, index) => {
+    categories[index].title = capitalize(item.title);
+    categories[index].color = categoryColors[index % categoryColors.length];
+  });
+  return categories;
+};
+
+// Calculate total expense for each category
 const calculateTotalExpense = categories => {
   categories.map((item, index) => {
     let total = 0;
@@ -15,8 +24,6 @@ const calculateTotalExpense = categories => {
       total += subItem.amount;
     });
     categories[index].totalExpense = total;
-    categories[index].title = capitalize(item.title);
-    categories[index].color = categoryColors[index % categoryColors.length];
   });
   return categories;
 };
@@ -28,14 +35,15 @@ const getAllTransactions = categories => {
     item.transactions.map((subItem, subIndex) => {
       subItem['categoryId'] = item.id;
       subItem['categoryName'] = capitalize(item.title);
+      subItem['color'] = item.color;
       data.push(subItem);
     });
   });
   return data;
 };
 
-//Eliminate future transactions
-const eliminateFutureTransactions = categories => {
+//Eliminate reminder transactions
+const eliminateReminders = categories => {
   let result = [];
   categories = JSON.parse(JSON.stringify(categories));
 
@@ -115,9 +123,10 @@ const monthlyExpenses = (transactions, year) => {
 };
 
 export {
+  handleCategories,
   calculateTotalExpense,
   getAllTransactions,
-  eliminateFutureTransactions,
+  eliminateReminders,
   netExpense,
   dateFilterHelper,
   monthlyExpenses,

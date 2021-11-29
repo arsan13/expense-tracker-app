@@ -94,6 +94,7 @@ const styles = StyleSheet.create({
     marginTop: 15,
     borderRadius: 10,
     paddingHorizontal: 10,
+    justifyContent: 'center',
     // paddingBottom: 10,
   },
   chartAndButton: {

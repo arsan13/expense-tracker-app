@@ -5,8 +5,9 @@ import CustomSidebar from '../components/CustomSidebar';
 import {deleteService, getService, postService, putService} from '../utils/Api';
 import {
   calculateTotalExpense,
-  eliminateFutureTransactions,
+  eliminateReminders,
   getAllTransactions,
+  handleCategories,
 } from '../utils/HandleExpenses';
 import AllTransactionsScreen from '../screens/AllTransactionsScreen';
 import ChartScreen from '../screens/ChartScreen';
@@ -39,8 +40,9 @@ const AppStack = ({token, handleToken}) => {
       );
       return;
     }
+    allData = handleCategories(allData); //Add color field and capitalize category title
     let tempTransactions = getAllTransactions(allData);
-    let data = eliminateFutureTransactions(allData);
+    let data = eliminateReminders(allData);
     data = calculateTotalExpense(data);
     setCategories(data);
     setTransactions(tempTransactions.filter(item => item.remind === false));

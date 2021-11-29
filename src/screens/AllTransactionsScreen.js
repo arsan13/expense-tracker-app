@@ -175,7 +175,8 @@ const styles = StyleSheet.create({
     margin: 15,
     borderRadius: 10,
     paddingHorizontal: 10,
-    paddingBottom: 10,
+    // paddingBottom: 10,
+    justifyContent: 'center',
   },
   dataContainer: {
     marginVertical: 10,

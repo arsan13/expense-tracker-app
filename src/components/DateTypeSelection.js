@@ -125,13 +125,15 @@ export default DateTypeSelection;
 
 const styles = StyleSheet.create({
   container: {
-    padding: 10,
-    justifyContent: 'space-evenly',
+    flexGrow: 2,
+    paddingHorizontal: 10,
+    paddingTop: 10,
+    justifyContent: 'space-between',
   },
   options: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    // marginVertical: 5,
+    marginBottom: 5,
   },
   optionText: {
     color: textColor,
@@ -147,7 +149,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignContent: 'center',
-    marginTop: 12,
+    // marginTop: 12,
     alignItems: 'center',
   },
   selectedText: {

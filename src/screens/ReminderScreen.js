@@ -75,18 +75,18 @@ const ReminderScreen = ({reminders, deleteTransaction, updateTransaction}) => {
         {moment(new Date(item.transactionDate)).format('MMMM DD, YYYY')}
       </Text>
       <View style={styles.card}>
-        <Text style={[styles.text, {flex: 3}]}>{item.categoryName}</Text>
+        <View style={{flex: 3, flexDirection: 'row', alignItems: 'center'}}>
+          <View style={[styles.color, {backgroundColor: item.color}]} />
+          <Text style={{color: textColor, fontSize: 15}}>
+            {item.categoryName}
+          </Text>
+        </View>
         <Text style={[styles.text, {flex: 1}]}>
           {'\u20B9'} {item.amount}
         </Text>
         <TouchableOpacity
-          style={{
-            flex: 1,
-            alignItems: 'flex-end',
-          }}
-          onPress={() => {
-            handleDelete(item);
-          }}>
+          style={{flex: 1, alignItems: 'flex-end', justifyContent: 'center'}}
+          onPress={() => handleDelete(item)}>
           <Icon name="delete" size={25} color="#D11A2A" />
         </TouchableOpacity>
       </View>
@@ -132,6 +132,12 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     paddingVertical: 5,
     flex: 1,
+  },
+  color: {
+    marginRight: 10,
+    width: 15,
+    height: 15,
+    borderRadius: 15 / 2,
   },
   text: {
     color: textColor,
