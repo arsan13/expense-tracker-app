@@ -7,6 +7,8 @@ export const globalStyle = StyleSheet.create({
   error: {
     color: 'red',
     fontSize: 15,
+    textAlign: 'center',
+    marginVertical: 5,
   },
 });
 //Colors for various categories
