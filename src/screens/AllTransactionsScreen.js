@@ -6,7 +6,12 @@ import Loading from '../components/Loading';
 import moment from 'moment';
 import {textColor} from '../utils/GlobalStyle';
 
-const AllTransactionsScreen = ({route, allTransactions, deleteTransaction}) => {
+const AllTransactionsScreen = ({
+  route,
+  navigation,
+  allTransactions,
+  deleteTransaction,
+}) => {
   const [transactions, setTransactions] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [dateAndType, setdateAndType] = useState([]);
@@ -70,11 +75,6 @@ const AllTransactionsScreen = ({route, allTransactions, deleteTransaction}) => {
     setIsLoading(false);
   };
 
-  useEffect(() => {
-    if (route === undefined) handleDateFilter('Month', new Date());
-    else setTransactions(route.params.transactions);
-  }, [allTransactions]);
-
   const handleDelete = async transaction => {
     setIsLoading(true);
     const isDeleted = await deleteTransaction(
@@ -98,6 +98,19 @@ const AllTransactionsScreen = ({route, allTransactions, deleteTransaction}) => {
     setIsLoading(false);
   };
 
+  const handleUpdate = transaction => {
+    navigation.navigate('AddTransactionScreen', {
+      name: 'Add Transaction',
+      transaction: transaction,
+      showFutureDates: false,
+    });
+  };
+
+  useEffect(() => {
+    if (route.params === undefined) handleDateFilter('Month', new Date());
+    else setTransactions(route.params.transactions);
+  }, [allTransactions]);
+
   return (
     <>
       {isLoading ? (
@@ -117,7 +130,7 @@ const AllTransactionsScreen = ({route, allTransactions, deleteTransaction}) => {
             />
             <Button title="Export" onPress={handleExport} />
           </View>
-          {route === undefined && (
+          {route.params === undefined && (
             <View style={styles.dateContainer}>
               <DateTypeSelection sendDateToHome={handleDateFilter} />
             </View>
@@ -140,11 +153,17 @@ const AllTransactionsScreen = ({route, allTransactions, deleteTransaction}) => {
                       <Text style={{color: textColor}}>Note: {item.note}</Text>
                     )}
                   </View>
-                  <View style={{justifyContent: 'center'}}>
+                  <View style={{justifyContent: 'space-between'}}>
                     <Button
                       title="Delete"
                       onPress={() => {
                         handleDelete(item);
+                      }}
+                    />
+                    <Button
+                      title="Update"
+                      onPress={() => {
+                        handleUpdate(item);
                       }}
                     />
                   </View>

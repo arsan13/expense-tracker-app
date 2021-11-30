@@ -18,9 +18,14 @@ const AddTransactionScreen = ({
   route,
   categories,
   addTransaction,
+  updateTransaction,
 }) => {
   // showFutureDates === true, reminder txn, else regular txn
   const showFutureDates = route.params.showFutureDates;
+
+  // Transaction which needs to be updated
+  const oldTransaction = route.params.transaction;
+
   let initialState = {
     amount: 0,
     note: '',
@@ -40,6 +45,16 @@ const AddTransactionScreen = ({
   const [errMsg, setErrMsg] = useState('');
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [showDatePicker, setShowDatePicker] = useState(false);
+
+  const prepopulateDataForUpdate = () => {
+    setCategoryId(oldTransaction.categoryId);
+    setSelectedDate(new Date(oldTransaction.transactionDate));
+    setPayload({
+      ...payload,
+      amount: oldTransaction.amount,
+      note: oldTransaction.note,
+    });
+  };
 
   const handleChange = (key, value) => {
     setPayload({...payload, [key]: value});
@@ -81,7 +96,15 @@ const AddTransactionScreen = ({
     let payloadToSend = {...payload};
     if (showFutureDates) payloadToSend.remind = true;
 
-    const isSuccessful = await addTransaction(payloadToSend, categoryId);
+    let isSuccessful;
+    if (oldTransaction !== undefined)
+      isSuccessful = await updateTransaction(
+        payloadToSend,
+        categoryId,
+        oldTransaction.id,
+      );
+    else isSuccessful = await addTransaction(payloadToSend, categoryId);
+
     if (isSuccessful) {
       setCategoryId(null);
       setPayload(initialState);
@@ -89,7 +112,7 @@ const AddTransactionScreen = ({
       setIsLoading(false);
       navigation.goBack();
     } else {
-      setErrMsg('Error adding transaction. Please try again later.');
+      setErrMsg('Error adding/updating transaction. Please try again later.');
       setIsLoading(false);
     }
   };
@@ -107,9 +130,8 @@ const AddTransactionScreen = ({
   };
 
   useEffect(() => {
-    setCategoryId(null);
-    setPayload(initialState);
-  }, [categories]);
+    if (oldTransaction !== undefined) prepopulateDataForUpdate();
+  }, []);
 
   return (
     <View>
@@ -131,7 +153,7 @@ const AddTransactionScreen = ({
                     justifyContent: 'center',
                   }}>
                   <TextInput
-                    // value={payload.amount.toString()}
+                    value={payload.amount.toString()}
                     style={styles.amountField}
                     autoFocus={true}
                     placeholder="INR"
@@ -373,6 +395,7 @@ const styles = StyleSheet.create({
     borderColor: 'grey',
     backgroundColor: '#fff',
     color: textColor,
+    paddingLeft: 10,
   },
   addButton: {
     padding: 5,

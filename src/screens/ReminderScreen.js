@@ -56,7 +56,11 @@ const ReminderScreen = ({reminders, deleteTransaction, updateTransaction}) => {
     setIsLoading(true);
     let transaction = {...reminderItem};
     transaction.remind = false;
-    const isUpdated = await updateTransaction(transaction);
+    const isUpdated = await updateTransaction(
+      transaction,
+      transaction.categoryId,
+      transaction.id,
+    );
     if (!isUpdated) {
       console.log('Error updating transaction');
     }

@@ -14,6 +14,7 @@ import ChartScreen from '../screens/ChartScreen';
 import HomeStack from './HomeStack';
 import ReminderStack from './ReminderStack';
 import {Alert} from 'react-native';
+import TransactionStack from './TransactionStack';
 
 const Drawer = createDrawerNavigator();
 
@@ -115,13 +116,13 @@ const AppStack = ({token, handleToken}) => {
   };
 
   //Update Transaction
-  const updateTransaction = async transaction => {
+  const updateTransaction = async (transaction, categoryId, transactionId) => {
     const res = await putService(
       'TRANSACTIONS_API',
       token,
       transaction,
-      transaction.categoryId,
-      transaction.id,
+      categoryId,
+      transactionId,
     );
     if (res !== null) {
       fetchAllCategories();
@@ -150,6 +151,7 @@ const AppStack = ({token, handleToken}) => {
             deleteCategory={deleteCategory}
             addTransaction={addTransaction}
             deleteTransaction={deleteTransaction}
+            updateTransaction={updateTransaction}
           />
         )}
       </Drawer.Screen>
@@ -163,11 +165,17 @@ const AppStack = ({token, handleToken}) => {
           />
         )}
       </Drawer.Screen>
-      <Drawer.Screen name="AllTransactions" options={{title: 'Transactions'}}>
+      <Drawer.Screen name="AllTransactions" options={{headerShown: false}}>
         {props => (
-          <AllTransactionsScreen
+          // <AllTransactionsScreen
+          //   allTransactions={transactions}
+          //   deleteTransaction={deleteTransaction}
+          // />
+          <TransactionStack
+            categories={categories}
             allTransactions={transactions}
             deleteTransaction={deleteTransaction}
+            updateTransaction={updateTransaction}
           />
         )}
       </Drawer.Screen>

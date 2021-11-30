@@ -16,6 +16,7 @@ const HomeStack = ({
   updateCategory,
   addTransaction,
   deleteTransaction,
+  updateTransaction,
 }) => {
   return (
     <Stack.Navigator>
@@ -37,11 +38,12 @@ const HomeStack = ({
       </Stack.Screen>
       <Stack.Screen
         name="AddTransactionScreen"
-        options={{title: 'Add Transaction'}}>
+        options={({route}) => ({title: route.params.name})}>
         {props => (
           <AddTransactionScreen
             categories={categories}
             addTransaction={addTransaction}
+            updateTransaction={updateTransaction}
             {...props}
           />
         )}

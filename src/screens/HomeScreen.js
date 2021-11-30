@@ -41,6 +41,7 @@ const HomeScreen = ({allCategories, navigation}) => {
 
   const handleButtonPress = () => {
     navigation.navigate('AddTransactionScreen', {
+      name: 'Add Transaction',
       showFutureDates: false,
     });
   };
