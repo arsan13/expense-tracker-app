@@ -53,6 +53,7 @@ const AddTransactionScreen = ({
       ...payload,
       amount: oldTransaction.amount,
       note: oldTransaction.note,
+      transactionDate: oldTransaction.transactionDate,
     });
   };
 
@@ -120,6 +121,10 @@ const AddTransactionScreen = ({
   const validate = () => {
     if (payload.amount <= 0) {
       setErrMsg('Amount must be greater than 0');
+      return false;
+    }
+    if (isNaN(payload.amount)) {
+      setErrMsg('Amount must be a number');
       return false;
     }
     if (categoryId === null) {

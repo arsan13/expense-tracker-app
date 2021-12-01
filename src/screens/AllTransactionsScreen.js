@@ -1,10 +1,19 @@
 import React, {useState, useEffect} from 'react';
-import {Button, FlatList, StyleSheet, Text, View, Alert} from 'react-native';
+import {
+  Button,
+  FlatList,
+  StyleSheet,
+  Text,
+  View,
+  Alert,
+  TouchableOpacity,
+} from 'react-native';
 import DateTypeSelection from '../components/DateTypeSelection';
 import ExportToExcel from '../utils/ExportToExcel';
 import Loading from '../components/Loading';
 import moment from 'moment';
 import {textColor} from '../utils/GlobalStyle';
+import TransactionModal from '../components/TransactionModal';
 
 const AllTransactionsScreen = ({
   route,
@@ -13,15 +22,21 @@ const AllTransactionsScreen = ({
   deleteTransaction,
 }) => {
   const [transactions, setTransactions] = useState([]);
+  const [tempTransactions, setTempTransactions] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [dateAndType, setdateAndType] = useState([]);
+  const [modalItem, setModalItem] = useState(null);
+
+  const hideModal = () => {
+    setModalItem(null);
+  };
 
   const handleDateFilter = (type, value) => {
     setdateAndType([type, value]);
     switch (type) {
       case 'Day':
         setTransactions(
-          allTransactions.filter(
+          tempTransactions.filter(
             item =>
               new Date(item.transactionDate).toLocaleDateString() ===
               value.toLocaleDateString(),
@@ -30,7 +45,7 @@ const AllTransactionsScreen = ({
         break;
       case 'Month':
         setTransactions(
-          allTransactions.filter(item => {
+          tempTransactions.filter(item => {
             let date = new Date(item.transactionDate);
             return (
               date.getMonth() === value.getMonth() &&
@@ -41,7 +56,7 @@ const AllTransactionsScreen = ({
         break;
       case 'Year':
         setTransactions(
-          allTransactions.filter(
+          tempTransactions.filter(
             item => new Date(item.transactionDate).getFullYear() === value,
           ),
         );
@@ -67,6 +82,8 @@ const AllTransactionsScreen = ({
       item.category = item.categoryName;
       delete item.transactionDate;
       delete item.id;
+      delete item.color;
+      delete item.remind;
       delete item.categoryId;
       delete item.categoryName;
     }
@@ -95,10 +112,12 @@ const AllTransactionsScreen = ({
         {cancelable: true},
       );
     }
+    setModalItem(null);
     setIsLoading(false);
   };
 
   const handleUpdate = transaction => {
+    setModalItem(null);
     navigation.navigate('AddTransactionScreen', {
       name: 'Add Transaction',
       transaction: transaction,
@@ -107,9 +126,39 @@ const AllTransactionsScreen = ({
   };
 
   useEffect(() => {
-    if (route.params === undefined) handleDateFilter('Month', new Date());
-    else setTransactions(route.params.transactions);
+    setTempTransactions(
+      route.params === undefined ? allTransactions : route.params.transactions,
+    );
   }, [allTransactions]);
+
+  useEffect(() => {
+    handleDateFilter('Month', new Date());
+  }, [tempTransactions]);
+
+  const renderItem = ({item}) => (
+    <TouchableOpacity onPress={() => setModalItem(item)} style={styles.card}>
+      <View style={styles.cardDate}>
+        <Text style={styles.text}>
+          {moment(new Date(item.transactionDate)).format('DD')}
+        </Text>
+        <Text style={styles.text}>
+          {moment(new Date(item.transactionDate)).format('MMM')}
+        </Text>
+      </View>
+      <View style={styles.cardText}>
+        <Text style={styles.text}>{item.categoryName}</Text>
+        <Text style={{color: 'grey'}}>
+          {item.note === '' ? 'N/A' : item.note}
+        </Text>
+      </View>
+      <View style={styles.cardAmount}>
+        <Text style={styles.text}>
+          {'\u20B9'}
+          {item.amount}
+        </Text>
+      </View>
+    </TouchableOpacity>
+  );
 
   return (
     <>
@@ -118,61 +167,42 @@ const AllTransactionsScreen = ({
           <Loading />
         </View>
       ) : (
-        <View style={{flex: 1}}>
-          <View style={styles.header}>
-            <Button
-              title="Sort by date"
-              onPress={() => sortTransactions('transactionDate')}
+        <>
+          {modalItem !== null ? (
+            <TransactionModal
+              item={modalItem}
+              hideModal={hideModal}
+              handleUpdate={handleUpdate}
+              handleDelete={handleDelete}
             />
-            <Button
-              title="Sort by amount"
-              onPress={() => sortTransactions('amount')}
-            />
-            <Button title="Export" onPress={handleExport} />
-          </View>
-          {route.params === undefined && (
-            <View style={styles.dateContainer}>
-              <DateTypeSelection sendDateToHome={handleDateFilter} />
+          ) : (
+            <View style={{flex: 1}}>
+              <View style={styles.header}>
+                <Button
+                  title="Sort by date"
+                  onPress={() => sortTransactions('transactionDate')}
+                />
+                <Button
+                  title="Sort by amount"
+                  onPress={() => sortTransactions('amount')}
+                />
+                <Button title="Export" onPress={handleExport} />
+              </View>
+
+              <View style={styles.dateContainer}>
+                <DateTypeSelection sendDateToHome={handleDateFilter} />
+              </View>
+
+              <View style={styles.dataContainer}>
+                <FlatList
+                  data={transactions}
+                  keyExtractor={item => item.id}
+                  renderItem={renderItem}
+                />
+              </View>
             </View>
           )}
-          <View style={styles.dataContainer}>
-            <FlatList
-              data={transactions}
-              keyExtractor={item => item.id}
-              renderItem={({item}) => (
-                <View style={styles.dataItems}>
-                  <View>
-                    <Text style={{color: textColor}}>{item.categoryName}</Text>
-                    <Text style={{color: textColor}}>
-                      Date: {new Date(item.transactionDate).toDateString()}
-                    </Text>
-                    <Text style={{color: textColor}}>
-                      Amount: {item.amount}
-                    </Text>
-                    {item.note.trim() !== '' && (
-                      <Text style={{color: textColor}}>Note: {item.note}</Text>
-                    )}
-                  </View>
-                  <View style={{justifyContent: 'space-between'}}>
-                    <Button
-                      title="Delete"
-                      onPress={() => {
-                        handleDelete(item);
-                      }}
-                    />
-                    <Button
-                      title="Update"
-                      onPress={() => {
-                        handleUpdate(item);
-                      }}
-                    />
-                  </View>
-                  {/* <View style={{borderBottomWidth: 1, marginTop: 10}} /> */}
-                </View>
-              )}
-            />
-          </View>
-        </View>
+        </>
       )}
     </>
   );
@@ -194,11 +224,10 @@ const styles = StyleSheet.create({
     margin: 15,
     borderRadius: 10,
     paddingHorizontal: 10,
-    // paddingBottom: 10,
     justifyContent: 'center',
   },
   dataContainer: {
-    marginVertical: 10,
+    marginHorizontal: 15,
     flex: 12,
   },
   dataItems: {
@@ -206,5 +235,30 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     marginVertical: 5,
     marginHorizontal: 25,
+  },
+  card: {
+    flex: 1,
+    flexDirection: 'row',
+    backgroundColor: '#fff',
+    paddingVertical: 5,
+    paddingHorizontal: 10,
+    marginVertical: 5,
+    borderRadius: 10,
+  },
+  text: {
+    color: textColor,
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  cardDate: {
+    flex: 1,
+  },
+  cardText: {
+    flex: 6,
+    // backgroundColor: 'green',
+  },
+  cardAmount: {
+    flex: 2,
+    alignItems: 'flex-end',
   },
 });
