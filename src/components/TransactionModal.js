@@ -30,11 +30,14 @@ const TransactionModal = ({item, hideModal, handleUpdate, handleDelete}) => {
               </Text>
               {item.categoryName.length <= 10 && item.note.length <= 10 ? (
                 <Text style={styles.modalText}>
-                  {item.categoryName} - {item.note}
+                  {item.categoryName}
+                  {item.note && ' - ' + item.note}
                 </Text>
               ) : (
                 <>
-                  <Text style={styles.modalText}>{item.categoryName}</Text>
+                  <Text style={[styles.modalText, {marginBottom: 10}]}>
+                    {item.categoryName}
+                  </Text>
                   <Text style={[styles.modalText, {fontSize: 15}]}>
                     {item.note.length <= 20 ? item.note : item.note + '...'}
                   </Text>
@@ -104,7 +107,7 @@ const styles = StyleSheet.create({
   divider: {
     margin: 2,
     borderBottomWidth: 1,
-    borderColor: 'grey',
+    borderColor: '#D3D3D3',
     alignSelf: 'stretch',
     marginBottom: 15,
   },

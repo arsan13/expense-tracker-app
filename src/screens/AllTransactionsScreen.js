@@ -8,12 +8,13 @@ import {
   Alert,
   TouchableOpacity,
 } from 'react-native';
-import DateTypeSelection from '../components/DateTypeSelection';
-import ExportToExcel from '../utils/ExportToExcel';
-import Loading from '../components/Loading';
 import moment from 'moment';
-import {textColor} from '../utils/GlobalStyle';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import Loading from '../components/Loading';
+import {primaryColor, textColor} from '../utils/GlobalStyle';
+import ExportToExcel from '../utils/ExportToExcel';
 import TransactionModal from '../components/TransactionModal';
+import DateTypeSelection from '../components/DateTypeSelection';
 
 const AllTransactionsScreen = ({
   route,
@@ -75,7 +76,7 @@ const AllTransactionsScreen = ({
     if (transactions.length < 1) return;
     setIsLoading(true);
 
-    //Covert transactionDate, rename key names and remove id(transaction) and categoryId
+    //Covert transactionDate, rename key names and remove unnecessary fields
     let data = JSON.parse(JSON.stringify(transactions));
     for (let item of data) {
       item.date = moment(new Date(item.transactionDate)).format('DD-MMM-YYYY');
@@ -138,12 +139,15 @@ const AllTransactionsScreen = ({
   const renderItem = ({item}) => (
     <TouchableOpacity onPress={() => setModalItem(item)} style={styles.card}>
       <View style={styles.cardDate}>
-        <Text style={styles.text}>
-          {moment(new Date(item.transactionDate)).format('DD')}
-        </Text>
-        <Text style={styles.text}>
-          {moment(new Date(item.transactionDate)).format('MMM')}
-        </Text>
+        <View>
+          <Text style={styles.text}>
+            {moment(new Date(item.transactionDate)).format('DD')}
+          </Text>
+          <Text style={styles.text}>
+            {moment(new Date(item.transactionDate)).format('MMM')}
+          </Text>
+        </View>
+        <View style={styles.divider} />
       </View>
       <View style={styles.cardText}>
         <Text style={styles.text}>{item.categoryName}</Text>
@@ -186,7 +190,14 @@ const AllTransactionsScreen = ({
                   title="Sort by amount"
                   onPress={() => sortTransactions('amount')}
                 />
-                <Button title="Export" onPress={handleExport} />
+                {/* <Button title="Export" onPress={handleExport} /> */}
+                <TouchableOpacity onPress={handleExport}>
+                  <Icon
+                    name="file-export-outline"
+                    size={35}
+                    color={primaryColor}
+                  />
+                </TouchableOpacity>
               </View>
 
               <View style={styles.dateContainer}>
@@ -214,7 +225,7 @@ const styles = StyleSheet.create({
   header: {
     flex: 1,
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'space-around',
     alignItems: 'center',
     padding: 10,
   },
@@ -252,10 +263,17 @@ const styles = StyleSheet.create({
   },
   cardDate: {
     flex: 1,
+    flexDirection: 'row',
+  },
+  divider: {
+    borderRightWidth: 1,
+    marginVertical: 3,
+    marginHorizontal: 5,
+    borderColor: '#D3D3D3',
   },
   cardText: {
     flex: 6,
-    // backgroundColor: 'green',
+    marginLeft: 3,
   },
   cardAmount: {
     flex: 2,
