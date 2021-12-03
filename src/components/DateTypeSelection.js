@@ -5,13 +5,13 @@ import DatePicker from './DatePicker';
 import MonthYearPicker from './MonthYearPicker';
 import {primaryColor, textColor} from '../utils/GlobalStyle';
 
-const DateTypeSelection = ({sendDateToHome}) => {
+const DateTypeSelection = ({date, sendDateToHome}) => {
   const options = ['Day', 'Month', 'Year'];
-  const [selectedDate, setSelectedDate] = useState(new Date());
+  const [selectedDate, setSelectedDate] = useState(date);
   const [showPicker, setShowPicker] = useState(false);
   const [selectedOption, setSelectedOption] = useState('Month');
   const [selectedValue, setSelectedValue] = useState(
-    moment(new Date()).format('MMMM, YYYY'),
+    moment(date).format('MMMM, YYYY'),
   );
 
   // Options selection: Day, Month and Year
@@ -72,6 +72,11 @@ const DateTypeSelection = ({sendDateToHome}) => {
       );
     }
   };
+
+  useEffect(() => {
+    setSelectedDate(date);
+    setSelectedValue(moment(date).format('MMMM, YYYY'));
+  }, [date]);
 
   return (
     <View style={styles.container}>

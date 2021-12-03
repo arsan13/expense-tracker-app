@@ -201,7 +201,10 @@ const AllTransactionsScreen = ({
               </View>
 
               <View style={styles.dateContainer}>
-                <DateTypeSelection sendDateToHome={handleDateFilter} />
+                <DateTypeSelection
+                  date={new Date()}
+                  sendDateToHome={handleDateFilter}
+                />
               </View>
 
               <View style={styles.dataContainer}>

@@ -14,6 +14,7 @@ import {primaryColor} from '../utils/GlobalStyle';
 const HomeScreen = ({allCategories, navigation}) => {
   const [categories, setCategories] = useState([]);
   const [total, setTotal] = useState(0);
+  const [date, setDate] = useState(new Date());
 
   const handleDateFilter = (type, value) => {
     if (allCategories === null) {
@@ -47,13 +48,14 @@ const HomeScreen = ({allCategories, navigation}) => {
   };
 
   useEffect(() => {
+    setDate(new Date());
     handleDateFilter('Month', new Date());
   }, [allCategories]);
 
   return (
     <View style={styles.container}>
       <View style={styles.dateContainer}>
-        <DateTypeSelection sendDateToHome={handleDateFilter} />
+        <DateTypeSelection date={date} sendDateToHome={handleDateFilter} />
       </View>
       <View style={styles.chartAndButton}>
         <PieChart categories={categories} total={total} />
