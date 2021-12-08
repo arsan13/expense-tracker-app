@@ -12,13 +12,13 @@ const ExportToExcel = async (type, selectedDate, data) => {
   else selectedDate = '';
 
   const filePath = RNFS.DownloadDirectoryPath;
-  const filename = `${filePath}/Report()_${presentDate.getTime()}.xlsx`;
+  const filename = `${filePath}/Report(${selectedDate})_${presentDate.getTime()}.xlsx`;
 
   // function to handle exporting
   const exportDataToExcel = () => {
     let wb = XLSX.utils.book_new(); //Create workbook
     let ws = XLSX.utils.json_to_sheet(data); //Create worksheet
-    XLSX.utils.book_append_sheet(wb, ws, 'selectedDate'); //Add sheet to workbook
+    XLSX.utils.book_append_sheet(wb, ws, selectedDate); //Add sheet to workbook
     const wbout = XLSX.write(wb, {type: 'binary', bookType: 'xlsx'}); //Excel file
 
     // Write generated excel to Storage

@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useLayoutEffect} from 'react';
 import {
   Button,
   FlatList,
@@ -27,6 +27,7 @@ const AllTransactionsScreen = ({
   const [isLoading, setIsLoading] = useState(false);
   const [dateAndType, setdateAndType] = useState([]);
   const [modalItem, setModalItem] = useState(null);
+  const [date, setDate] = useState(new Date());
 
   const hideModal = () => {
     setModalItem(null);
@@ -136,6 +137,16 @@ const AllTransactionsScreen = ({
     handleDateFilter('Month', new Date());
   }, [tempTransactions]);
 
+  useEffect(() => {
+    navigation.setOptions({
+      headerRight: () => (
+        <TouchableOpacity onPress={() => handleExport()}>
+          <Icon name="file-export-outline" size={30} color={primaryColor} />
+        </TouchableOpacity>
+      ),
+    });
+  }, [transactions]);
+
   const renderItem = ({item}) => (
     <TouchableOpacity onPress={() => setModalItem(item)} style={styles.card}>
       <View style={styles.cardDate}>
@@ -190,22 +201,16 @@ const AllTransactionsScreen = ({
                   title="Sort by amount"
                   onPress={() => sortTransactions('amount')}
                 />
-                {/* <Button title="Export" onPress={handleExport} /> */}
-                <TouchableOpacity onPress={handleExport}>
-                  <Icon
-                    name="file-export-outline"
-                    size={35}
-                    color={primaryColor}
-                  />
-                </TouchableOpacity>
               </View>
 
-              <View style={styles.dateContainer}>
-                <DateTypeSelection
-                  date={new Date()}
-                  sendDateToHome={handleDateFilter}
-                />
-              </View>
+              {route.params === undefined && (
+                <View style={styles.dateContainer}>
+                  <DateTypeSelection
+                    date={date}
+                    sendDateToHome={handleDateFilter}
+                  />
+                </View>
+              )}
 
               <View style={styles.dataContainer}>
                 <FlatList
