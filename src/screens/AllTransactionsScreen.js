@@ -74,7 +74,6 @@ const AllTransactionsScreen = ({
   };
 
   const handleExport = async () => {
-    if (transactions.length < 1) return;
     setIsLoading(true);
 
     //Covert transactionDate, rename key names and remove unnecessary fields
@@ -127,11 +126,25 @@ const AllTransactionsScreen = ({
     });
   };
 
+  const showDialog = () => {
+    if (transactions.length < 1) {
+      Alert.alert('Error!', 'No data found', [{text: 'Cancel'}]);
+      return;
+    }
+    let dateValue = dateAndType[1];
+    if (dateAndType[0] === 'Day') dateValue = dateValue.toLocaleDateString();
+    else if (dateAndType[0] === 'Year') dateValue = 'year ' + dateValue;
+    else dateValue = moment(dateValue).format('MMMM, YYYY');
+    Alert.alert('Confirmation!', 'Export data of ' + dateValue, [
+      {text: 'Cancel'},
+      {text: 'OK', onPress: () => handleExport()},
+    ]);
+  };
+
   useEffect(() => {
-    setTempTransactions(
-      route.params === undefined ? allTransactions : route.params.transactions,
-    );
-  }, [allTransactions]);
+    if (route.params === undefined) setTempTransactions(allTransactions);
+    else setTransactions(route.params.transactions);
+  }, [route.params === undefined ? allTransactions : transactions]);
 
   useEffect(() => {
     handleDateFilter('Month', new Date());
@@ -140,7 +153,7 @@ const AllTransactionsScreen = ({
   useEffect(() => {
     navigation.setOptions({
       headerRight: () => (
-        <TouchableOpacity onPress={() => handleExport()}>
+        <TouchableOpacity onPress={() => showDialog()}>
           <Icon name="file-export-outline" size={30} color={primaryColor} />
         </TouchableOpacity>
       ),
@@ -192,17 +205,6 @@ const AllTransactionsScreen = ({
             />
           ) : (
             <View style={{flex: 1}}>
-              <View style={styles.header}>
-                <Button
-                  title="Sort by date"
-                  onPress={() => sortTransactions('transactionDate')}
-                />
-                <Button
-                  title="Sort by amount"
-                  onPress={() => sortTransactions('amount')}
-                />
-              </View>
-
               {route.params === undefined && (
                 <View style={styles.dateContainer}>
                   <DateTypeSelection
@@ -219,6 +221,19 @@ const AllTransactionsScreen = ({
                   renderItem={renderItem}
                 />
               </View>
+
+              <View style={styles.footer}>
+                <TouchableOpacity
+                  style={[styles.sortButtons, styles.buttonDivider]}
+                  onPress={() => sortTransactions('transactionDate')}>
+                  <Text style={styles.footerText}>Sort by Date</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={styles.sortButtons}
+                  onPress={() => sortTransactions('amount')}>
+                  <Text style={styles.footerText}>Sort by Amount</Text>
+                </TouchableOpacity>
+              </View>
             </View>
           )}
         </>
@@ -230,24 +245,40 @@ const AllTransactionsScreen = ({
 export default AllTransactionsScreen;
 
 const styles = StyleSheet.create({
-  header: {
+  footer: {
     flex: 1,
     flexDirection: 'row',
     justifyContent: 'space-around',
     alignItems: 'center',
-    padding: 10,
+    borderTopWidth: 1,
+    borderTopColor: '#D3D3D3',
+    backgroundColor: '#fff',
+  },
+  sortButtons: {
+    paddingVertical: 10,
+    width: '50%',
+  },
+  buttonDivider: {
+    borderRightWidth: 1,
+    borderRightColor: '#D3D3D3',
+  },
+  footerText: {
+    color: textColor,
+    textAlign: 'center',
   },
   dateContainer: {
     flex: 2,
     backgroundColor: '#fff',
-    margin: 15,
+    marginVertical: 10,
+    marginHorizontal: 15,
     borderRadius: 10,
     paddingHorizontal: 10,
     justifyContent: 'center',
   },
   dataContainer: {
-    marginHorizontal: 15,
     flex: 12,
+    marginHorizontal: 15,
+    marginBottom: 10,
   },
   dataItems: {
     flexDirection: 'row',
