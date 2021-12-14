@@ -80,6 +80,7 @@ const AllTransactionsScreen = ({
     let data = JSON.parse(JSON.stringify(transactions));
     for (let item of data) {
       item.date = moment(new Date(item.transactionDate)).format('DD-MMM-YYYY');
+      if (item.note.trim() === '') item.note = 'null';
       item.category = item.categoryName;
       delete item.transactionDate;
       delete item.id;
