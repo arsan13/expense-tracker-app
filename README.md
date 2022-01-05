@@ -6,6 +6,8 @@ A simple mobile application built with the intention of providing a clean and at
 | :-------------------------------------------------------------: | :-----------------------------------------------------------------: | :------------------------------------------------------------: | :--------------------------------------------------------------: |
 | <img src="src/assets/screenshots/home-screen.jpeg" width="200"> | <img src="src/assets/screenshots/add-transaction.jpeg" width="200"> | <img src="src/assets/screenshots/categories.jpeg" width="200"> | <img src="src/assets/screenshots/transactions.jpeg" width="200"> |
 
+Click [here](https://drive.google.com/uc?id=1bPamh3ypL3-X463aTMXCn8XNQdBWaAdZ&export=download) to directly download the apk file and test the app.
+
 ## Run Locally
 
 Clone the project
