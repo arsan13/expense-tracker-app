@@ -66,7 +66,7 @@ In the android folder, run the following command
   ./gradlew assembleDebug
 ```
 
-APK file will be present in the following path
+The APK file will be present in the following path
 
 ```bash
   yourProject/android/app/build/outputs/apk/debug/app-debug.apk
