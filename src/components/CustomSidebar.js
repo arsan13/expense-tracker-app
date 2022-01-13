@@ -96,7 +96,7 @@ const CustomSidebar = ({handleToken, ...props}) => {
           label="Sign Out"
           onPress={() => {
             props.navigation.closeDrawer();
-            handleToken('');
+            handleToken(null);
           }}
         />
       </Drawer.Section>

@@ -6,12 +6,16 @@ import {textColor} from '../utils/GlobalStyle';
 const PieChart = ({categories, total}) => {
   const rupeesSymbol = '\u20B9';
   const gaugeText = `${total} ${rupeesSymbol}`;
-  let data = categories.map(item => {
-    let obj = {};
-    obj.percentage = item.percentage;
-    obj.color = item.color;
-    return obj;
-  });
+
+  let data = [];
+  if (categories !== null) {
+    data = categories.map(item => {
+      let obj = {};
+      obj.percentage = item.percentage;
+      obj.color = item.color;
+      return obj;
+    });
+  }
 
   return (
     <View style={styles.container}>

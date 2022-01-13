@@ -34,7 +34,7 @@ const AppStack = ({token, handleToken}) => {
         [
           {
             text: 'Ok',
-            onPress: handleToken(''),
+            onPress: handleToken(null),
           },
         ],
         {cancelable: true},

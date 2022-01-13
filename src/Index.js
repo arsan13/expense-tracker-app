@@ -1,18 +1,26 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {NavigationContainer} from '@react-navigation/native';
+import {getData, storeData, removeData} from './utils/LocalStorage';
 import AuthStack from './navigation/AuthStack';
 import AppStack from './navigation/AppStack';
 
 const Index = () => {
-  const [token, setToken] = useState('');
+  const [token, setToken] = useState(null);
 
-  const handleToken = text => {
-    setToken(text);
+  const handleToken = value => {
+    if (value === null) removeData();
+    else storeData(value);
+    setToken(value);
   };
+
+  useEffect(() => {
+    const value = getData();
+    setToken(value);
+  }, []);
 
   return (
     <NavigationContainer>
-      {token.length === 0 ? (
+      {token === null ? (
         <AuthStack handleToken={handleToken} />
       ) : (
         <AppStack token={token} handleToken={handleToken} />
