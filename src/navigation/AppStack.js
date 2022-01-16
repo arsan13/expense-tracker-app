@@ -41,7 +41,7 @@ const AppStack = ({token, handleToken}) => {
       );
       return;
     }
-    allData = handleCategories(allData); //Add color field and capitalize category title
+    allData = handleCategories(allData);
     let tempTransactions = getAllTransactions(allData);
     let data = eliminateReminders(allData);
     data = calculateTotalExpense(data);
@@ -167,10 +167,6 @@ const AppStack = ({token, handleToken}) => {
       </Drawer.Screen>
       <Drawer.Screen name="AllTransactions" options={{headerShown: false}}>
         {props => (
-          // <AllTransactionsScreen
-          //   allTransactions={transactions}
-          //   deleteTransaction={deleteTransaction}
-          // />
           <TransactionStack
             categories={categories}
             allTransactions={transactions}
