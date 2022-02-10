@@ -14,8 +14,8 @@ const Index = () => {
   };
 
   useEffect(() => {
-    const value = getData();
-    setToken(value);
+    // Check async storage if user is logged in
+    getData().then(val => setToken(val));
   }, []);
 
   return (
