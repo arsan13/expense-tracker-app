@@ -1,6 +1,5 @@
 import React, {useState, useEffect, useLayoutEffect} from 'react';
 import {
-  Button,
   FlatList,
   StyleSheet,
   Text,
@@ -10,6 +9,7 @@ import {
 } from 'react-native';
 import moment from 'moment';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import {useDeviceOrientation} from '@react-native-community/hooks';
 import Loading from '../components/Loading';
 import {primaryColor, textColor} from '../utils/GlobalStyle';
 import ExportToExcel from '../utils/ExportToExcel';
@@ -28,6 +28,8 @@ const AllTransactionsScreen = ({
   const [dateAndType, setdateAndType] = useState([]);
   const [modalItem, setModalItem] = useState(null);
   const [date, setDate] = useState(new Date());
+
+  const {landscape} = useDeviceOrientation();
 
   const hideModal = () => {
     setModalItem(null);
@@ -207,7 +209,7 @@ const AllTransactionsScreen = ({
           ) : (
             <View style={{flex: 1}}>
               {route.params === undefined && (
-                <View style={styles.dateContainer}>
+                <View style={[styles.dateContainer, landscape && {flex: 2}]}>
                   <DateTypeSelection
                     date={date}
                     sendDateToHome={handleDateFilter}
@@ -215,7 +217,7 @@ const AllTransactionsScreen = ({
                 </View>
               )}
 
-              <View style={styles.dataContainer}>
+              <View style={[styles.dataContainer, landscape && {flex: 3}]}>
                 <FlatList
                   data={transactions}
                   keyExtractor={item => item.id}
@@ -223,7 +225,7 @@ const AllTransactionsScreen = ({
                 />
               </View>
 
-              <View style={styles.footer}>
+              <View style={[styles.footer, landscape && {flex: 1}]}>
                 <TouchableOpacity
                   style={[styles.sortButtons, styles.buttonDivider]}
                   onPress={() => sortTransactions('transactionDate')}>

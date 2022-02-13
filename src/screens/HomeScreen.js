@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from 'react';
-import {FlatList, StyleSheet, Text, View, TouchableOpacity} from 'react-native';
+import {FlatList, StyleSheet, View, TouchableOpacity} from 'react-native';
+import {useDeviceOrientation} from '@react-native-community/hooks';
 import {Button} from 'react-native-paper';
 import DateTypeSelection from '../components/DateTypeSelection';
 import {
@@ -15,6 +16,8 @@ const HomeScreen = ({allCategories, navigation}) => {
   const [categories, setCategories] = useState([]);
   const [total, setTotal] = useState(0);
   const [date, setDate] = useState(new Date());
+
+  const {portrait} = useDeviceOrientation();
 
   const handleDateFilter = (type, value) => {
     if (allCategories === null) {
@@ -54,20 +57,22 @@ const HomeScreen = ({allCategories, navigation}) => {
 
   return (
     <View style={styles.container}>
-      <View style={styles.dateContainer}>
+      <View style={[styles.dateContainer, !portrait && {flex: 4}]}>
         <DateTypeSelection date={date} sendDateToHome={handleDateFilter} />
       </View>
-      <View style={styles.chartAndButton}>
-        <PieChart categories={categories} total={total} />
-        <Button
-          icon="plus-thick"
-          color={primaryColor}
-          mode="contained"
-          style={{width: '90%', padding: 2}}
-          onPress={handleButtonPress}>
-          Add Transaction
-        </Button>
-      </View>
+      {portrait && (
+        <View style={styles.chartAndButton}>
+          <PieChart categories={categories} total={total} />
+          <Button
+            icon="plus-thick"
+            color={primaryColor}
+            mode="contained"
+            style={{width: '90%', padding: 2}}
+            onPress={handleButtonPress}>
+            Add Transaction
+          </Button>
+        </View>
+      )}
       <View style={styles.dataContainer}>
         <FlatList
           data={categories}
