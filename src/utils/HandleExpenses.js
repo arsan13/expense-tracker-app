@@ -109,7 +109,7 @@ const dateFilterHelper = (type, value, categories) => {
   return result;
 };
 
-// Calculate expenses in each month for the desired year
+// Calculate expenses in each of the lst 12 months
 const monthlyExpenses = transactions => {
   const result = {};
   for (let item of transactions) {

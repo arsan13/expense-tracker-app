@@ -2,6 +2,7 @@ import React, {useState, useEffect} from 'react';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {useDeviceOrientation} from '@react-native-community/hooks';
 import {BarChart, LineChart} from 'react-native-chart-kit';
+import {Picker} from '@react-native-picker/picker';
 import Loading from '../components/Loading';
 import {windowWidth, windowHeight} from '../utils/Dimentions';
 import {monthlyExpenses} from '../utils/HandleExpenses';
@@ -38,6 +39,7 @@ const ChartScreen = ({transactions}) => {
   const [expenses, setExpenses] = useState([]);
   const [chartWidth, setChartWidth] = useState(windowWidth - 10);
   const [chartHeight, setChartHeight] = useState(250);
+  const [numberOfMonths, setNumberOfMonths] = useState(12);
 
   const {landscape} = useDeviceOrientation();
 
@@ -46,7 +48,7 @@ const ChartScreen = ({transactions}) => {
     let tempMonths = [];
     let tempExpenses = [];
     let currentMonthNo = new Date().getMonth();
-    for (let i = 0; i < 12; i++) {
+    for (let i = 0; i < numberOfMonths; i++) {
       let month = monthNames[currentMonthNo];
       tempMonths.push(month);
       if (response.hasOwnProperty(month)) tempExpenses.push(response[month]);
@@ -70,7 +72,7 @@ const ChartScreen = ({transactions}) => {
 
   useEffect(() => {
     transformTransactions();
-  }, [transactions]);
+  }, [transactions, numberOfMonths]);
 
   useEffect(() => {
     if (landscape) {
@@ -83,7 +85,7 @@ const ChartScreen = ({transactions}) => {
   }, [landscape]);
 
   return (
-    <View>
+    <>
       {months.length > 0 && months.length !== expenses.length ? (
         <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
           <Loading />
@@ -91,22 +93,38 @@ const ChartScreen = ({transactions}) => {
       ) : (
         <>
           {!landscape && (
-            <View style={styles.header}>
-              <TouchableOpacity
-                style={[styles.buttons, styles.buttonDivider]}
-                onPress={() => setIsBarChart(false)}>
-                <Text style={[styles.headerText, !isBarChart && styles.active]}>
-                  Line Chart
-                </Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={styles.buttons}
-                onPress={() => setIsBarChart(true)}>
-                <Text style={[styles.headerText, isBarChart && styles.active]}>
-                  Bar Chart
-                </Text>
-              </TouchableOpacity>
-            </View>
+            <>
+              <View style={styles.header}>
+                <TouchableOpacity
+                  style={[styles.buttons, styles.buttonDivider]}
+                  onPress={() => setIsBarChart(false)}>
+                  <Text
+                    style={[styles.headerText, !isBarChart && styles.active]}>
+                    Line Chart
+                  </Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={styles.buttons}
+                  onPress={() => setIsBarChart(true)}>
+                  <Text
+                    style={[styles.headerText, isBarChart && styles.active]}>
+                    Bar Chart
+                  </Text>
+                </TouchableOpacity>
+              </View>
+              <Picker
+                dropdownIconColor={textColor}
+                style={{color: textColor}}
+                selectedValue={numberOfMonths}
+                onValueChange={(itemValue, itemIndex) =>
+                  setNumberOfMonths(itemValue)
+                }>
+                <Picker.Item label="Last 12 months" value={12} />
+                <Picker.Item label="Last 9 months" value={9} />
+                <Picker.Item label="Last 6 months" value={6} />
+                <Picker.Item label="Last 3 months" value={3} />
+              </Picker>
+            </>
           )}
           <View style={{justifyContent: 'center', alignItems: 'center'}}>
             {isBarChart ? (
@@ -133,13 +151,13 @@ const ChartScreen = ({transactions}) => {
           {!landscape && (
             <View style={{alignItems: 'center', marginTop: 20}}>
               <Text style={{color: '#A5A5A5'}}>
-                Rotate screen for a detailed look of the chart.
+                Rotate the screen for a detailed look of the chart.
               </Text>
             </View>
           )}
         </>
       )}
-    </View>
+    </>
   );
 };
 
@@ -155,7 +173,6 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: '#D3D3D3',
     backgroundColor: '#fff',
-    marginBottom: 20,
   },
   buttons: {
     paddingVertical: 15,
