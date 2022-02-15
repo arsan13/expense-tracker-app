@@ -77,7 +77,7 @@ const CustomSidebar = ({handleToken, ...props}) => {
               props.navigation.navigate('ReminderStack');
             }}
           />
-          {/* <DrawerItem
+          <DrawerItem
             icon={({color, size}) => (
               <Icon name="chart-areaspline" color={color} size={size} />
             )}
@@ -85,7 +85,7 @@ const CustomSidebar = ({handleToken, ...props}) => {
             onPress={() => {
               props.navigation.navigate('Charts');
             }}
-          /> */}
+          />
         </Drawer.Section>
       </DrawerContentScrollView>
       <Drawer.Section style={styles.bottomDrawerSection}>

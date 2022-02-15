@@ -110,12 +110,14 @@ const dateFilterHelper = (type, value, categories) => {
 };
 
 // Calculate expenses in each month for the desired year
-const monthlyExpenses = (transactions, year) => {
+const monthlyExpenses = transactions => {
   const result = {};
   for (let item of transactions) {
-    let date = new Date(item.transactionDate);
-    if (date.getFullYear() !== year) continue;
-    let month = moment(date).format('MMM');
+    let tempDate = new Date(); //get current date
+    tempDate.setMonth(tempDate.getMonth() - 12); //subtract by 1 year
+    tempDate = tempDate.getTime(); //convert to time
+    if (item.transactionDate <= tempDate) continue; //filter only transactions of last year
+    let month = moment(item.transactionDate).format('MMM');
     if (result.hasOwnProperty(month)) result[month] += item.amount;
     else result[month] = item.amount;
   }
