@@ -109,8 +109,8 @@ const dateFilterHelper = (type, value, categories) => {
   return result;
 };
 
-// Calculate expenses in each of the lst 12 months
-const monthlyExpenses = transactions => {
+// Calculate expenses in each of the last 12 months
+const monthlyExpensesOfLastYear = transactions => {
   const result = {};
   for (let item of transactions) {
     let tempDate = new Date(); //get current date
@@ -124,6 +124,39 @@ const monthlyExpenses = transactions => {
   return result;
 };
 
+// Calculate expenses of last n months
+const lastNMonthsExpenses = (allExpenses, numberOfMonths) => {
+  const monthNames = [
+    'Jan',
+    'Feb',
+    'Mar',
+    'Apr',
+    'May',
+    'Jun',
+    'Jul',
+    'Aug',
+    'Sep',
+    'Oct',
+    'Nov',
+    'Dec',
+  ];
+  const result = {months: [], expenses: []};
+  let currentMonthNo = new Date().getMonth();
+  for (let i = 0; i < numberOfMonths; i++) {
+    let month = monthNames[currentMonthNo];
+    result.months.push(month);
+    if (allExpenses.hasOwnProperty(month))
+      result.expenses.push(allExpenses[month]);
+    else result.expenses.push(0);
+    //Making monthNames array cyclic. 12 indicates total months
+    currentMonthNo = (currentMonthNo - 1 + 12) % 12;
+  }
+  // Reverse array to dsiplay data from recent to past order.
+  result.months = result.months.reverse();
+  result.expenses = result.expenses.reverse();
+  return result;
+};
+
 export {
   handleCategories,
   calculateTotalExpense,
@@ -131,5 +164,6 @@ export {
   eliminateReminders,
   netExpense,
   dateFilterHelper,
-  monthlyExpenses,
+  monthlyExpensesOfLastYear,
+  lastNMonthsExpenses,
 };

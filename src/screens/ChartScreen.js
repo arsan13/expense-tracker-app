@@ -5,7 +5,10 @@ import {BarChart, LineChart} from 'react-native-chart-kit';
 import {Picker} from '@react-native-picker/picker';
 import Loading from '../components/Loading';
 import {windowWidth, windowHeight} from '../utils/Dimentions';
-import {monthlyExpenses} from '../utils/HandleExpenses';
+import {
+  lastNMonthsExpenses,
+  monthlyExpensesOfLastYear,
+} from '../utils/HandleExpenses';
 import {textColor} from '../utils/GlobalStyle';
 
 const chartConfig = {
@@ -20,46 +23,15 @@ const chartConfig = {
 };
 
 const ChartScreen = ({transactions}) => {
-  const monthNames = [
-    'Jan',
-    'Feb',
-    'Mar',
-    'Apr',
-    'May',
-    'Jun',
-    'Jul',
-    'Aug',
-    'Sep',
-    'Oct',
-    'Nov',
-    'Dec',
-  ];
   const [isBarChart, setIsBarChart] = useState(false);
-  const [months, setMonths] = useState(monthNames);
-  const [expenses, setExpenses] = useState([]);
-  const [chartWidth, setChartWidth] = useState(windowWidth - 10);
-  const [chartHeight, setChartHeight] = useState(250);
+  const [chartWidth, setChartWidth] = useState();
+  const [chartHeight, setChartHeight] = useState();
+  const [monthlyExpenses, setMonthlyExpenses] = useState(null);
   const [numberOfMonths, setNumberOfMonths] = useState(12);
+  const [months, setMonths] = useState([]);
+  const [expenses, setExpenses] = useState([]);
 
   const {landscape} = useDeviceOrientation();
-
-  const transformTransactions = () => {
-    const response = monthlyExpenses(transactions);
-    let tempMonths = [];
-    let tempExpenses = [];
-    let currentMonthNo = new Date().getMonth();
-    for (let i = 0; i < numberOfMonths; i++) {
-      let month = monthNames[currentMonthNo];
-      tempMonths.push(month);
-      if (response.hasOwnProperty(month)) tempExpenses.push(response[month]);
-      else tempExpenses.push(0);
-      //Making monthNames array cyclic. 12 indicates total months
-      currentMonthNo = (currentMonthNo - 1 + 12) % 12;
-    }
-    // Reverse array to dsiplay data from recent to past order.
-    setMonths(tempMonths.reverse());
-    setExpenses(tempExpenses.reverse());
-  };
 
   const dataForCharts = {
     labels: months,
@@ -71,91 +43,92 @@ const ChartScreen = ({transactions}) => {
   };
 
   useEffect(() => {
-    transformTransactions();
-  }, [transactions, numberOfMonths]);
+    const allExpenses = monthlyExpensesOfLastYear(transactions);
+    setMonthlyExpenses(allExpenses);
+  }, [transactions]);
 
   useEffect(() => {
-    if (landscape) {
-      setChartWidth(windowHeight - 20);
-      setChartHeight(280);
-    } else {
-      setChartWidth(windowWidth - 10);
-      setChartHeight(250);
-    }
+    if (monthlyExpenses === null) return;
+    const response = lastNMonthsExpenses(monthlyExpenses, numberOfMonths);
+    setMonths(response.months);
+    setExpenses(response.expenses);
+  }, [monthlyExpenses, numberOfMonths]);
+
+  useEffect(() => {
+    setChartWidth(landscape ? windowHeight - 20 : windowWidth - 10);
+    setChartHeight(landscape ? 280 : 250);
   }, [landscape]);
+
+  if (months.length < 1) {
+    return (
+      <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+        <Loading />
+      </View>
+    );
+  }
 
   return (
     <>
-      {months.length > 0 && months.length !== expenses.length ? (
-        <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-          <Loading />
-        </View>
-      ) : (
+      {!landscape && (
         <>
-          {!landscape && (
-            <>
-              <View style={styles.header}>
-                <TouchableOpacity
-                  style={[styles.buttons, styles.buttonDivider]}
-                  onPress={() => setIsBarChart(false)}>
-                  <Text
-                    style={[styles.headerText, !isBarChart && styles.active]}>
-                    Line Chart
-                  </Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  style={styles.buttons}
-                  onPress={() => setIsBarChart(true)}>
-                  <Text
-                    style={[styles.headerText, isBarChart && styles.active]}>
-                    Bar Chart
-                  </Text>
-                </TouchableOpacity>
-              </View>
-              <Picker
-                dropdownIconColor={textColor}
-                style={{color: textColor}}
-                selectedValue={numberOfMonths}
-                onValueChange={(itemValue, itemIndex) =>
-                  setNumberOfMonths(itemValue)
-                }>
-                <Picker.Item label="Last 12 months" value={12} />
-                <Picker.Item label="Last 9 months" value={9} />
-                <Picker.Item label="Last 6 months" value={6} />
-                <Picker.Item label="Last 3 months" value={3} />
-              </Picker>
-            </>
-          )}
-          <View style={{justifyContent: 'center', alignItems: 'center'}}>
-            {isBarChart ? (
-              <BarChart
-                data={dataForCharts}
-                width={chartWidth}
-                height={chartHeight}
-                yAxisLabel={'\u20B9'}
-                chartConfig={chartConfig}
-                verticalLabelRotation={30}
-              />
-            ) : (
-              <LineChart
-                data={dataForCharts}
-                width={chartWidth}
-                yAxisLabel={'\u20B9'}
-                height={chartHeight}
-                verticalLabelRotation={30}
-                chartConfig={chartConfig}
-                bezier
-              />
-            )}
-          </View>
-          {!landscape && (
-            <View style={{alignItems: 'center', marginTop: 20}}>
-              <Text style={{color: '#A5A5A5'}}>
-                Rotate the screen for a detailed look of the chart.
+          <View style={styles.header}>
+            <TouchableOpacity
+              style={[styles.buttons, styles.buttonDivider]}
+              onPress={() => setIsBarChart(false)}>
+              <Text style={[styles.headerText, !isBarChart && styles.active]}>
+                Line Chart
               </Text>
-            </View>
-          )}
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.buttons}
+              onPress={() => setIsBarChart(true)}>
+              <Text style={[styles.headerText, isBarChart && styles.active]}>
+                Bar Chart
+              </Text>
+            </TouchableOpacity>
+          </View>
+          <Picker
+            dropdownIconColor={textColor}
+            style={{color: textColor}}
+            selectedValue={numberOfMonths}
+            onValueChange={(itemValue, itemIndex) =>
+              setNumberOfMonths(itemValue)
+            }>
+            <Picker.Item label="Last 12 months" value={12} />
+            <Picker.Item label="Last 9 months" value={9} />
+            <Picker.Item label="Last 6 months" value={6} />
+            <Picker.Item label="Last 3 months" value={3} />
+          </Picker>
         </>
+      )}
+      <View style={{justifyContent: 'center', alignItems: 'center'}}>
+        {isBarChart ? (
+          <BarChart
+            data={dataForCharts}
+            width={chartWidth}
+            height={chartHeight}
+            yAxisLabel={'\u20B9'}
+            chartConfig={chartConfig}
+            verticalLabelRotation={30}
+          />
+        ) : (
+          <LineChart
+            data={dataForCharts}
+            width={chartWidth}
+            yAxisLabel={'\u20B9'}
+            height={chartHeight}
+            verticalLabelRotation={30}
+            chartConfig={chartConfig}
+            bezier
+          />
+        )}
+      </View>
+      {!landscape && (
+        <View style={{alignItems: 'center', marginTop: 20}}>
+          <Text style={{color: '#A5A5A5'}}>
+            Rotate the screen for a detailed look of the chart.
+          </Text>
+        </View>
       )}
     </>
   );
