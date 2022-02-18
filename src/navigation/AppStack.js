@@ -1,4 +1,5 @@
 import React, {useState, useEffect} from 'react';
+import {View, Text} from 'react-native';
 import {createDrawerNavigator} from '@react-navigation/drawer';
 import CategoryScreen from '../screens/CategoryScreen';
 import CustomSidebar from '../components/CustomSidebar';
@@ -9,28 +10,30 @@ import {
   getAllTransactions,
   handleCategories,
 } from '../utils/HandleExpenses';
-import AllTransactionsScreen from '../screens/AllTransactionsScreen';
 import ChartScreen from '../screens/ChartScreen';
 import HomeStack from './HomeStack';
 import ReminderStack from './ReminderStack';
 import {Alert} from 'react-native';
 import TransactionStack from './TransactionStack';
+import Loading from '../components/Loading';
 
 const Drawer = createDrawerNavigator();
 
 const AppStack = ({token, handleToken}) => {
+  const [loading, setLoading] = useState(false);
   const [categories, setCategories] = useState([]);
   const [transactions, setTransactions] = useState([]);
   const [reminders, setReminders] = useState([]);
 
   //Read Categories
   const fetchAllCategories = async () => {
+    setLoading(true);
     let allData = await getService('CATEGORIES_API', token);
     if (allData === null) {
       setCategories(null);
       Alert.alert(
-        'Internal Server Error!',
-        'You will be logged out. Please try to login later.',
+        'Session expired!',
+        'Your session has expired. You will be signed out automatically, please login again.',
         [
           {
             text: 'Ok',
@@ -48,6 +51,7 @@ const AppStack = ({token, handleToken}) => {
     setCategories(data);
     setTransactions(tempTransactions.filter(item => item.remind === false));
     setReminders(tempTransactions.filter(item => item.remind === true));
+    setLoading(false);
   };
 
   //Add Category
@@ -134,6 +138,14 @@ const AppStack = ({token, handleToken}) => {
   useEffect(() => {
     fetchAllCategories();
   }, []);
+
+  if (loading) {
+    return (
+      <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+        <Loading />
+      </View>
+    );
+  }
 
   return (
     <Drawer.Navigator
