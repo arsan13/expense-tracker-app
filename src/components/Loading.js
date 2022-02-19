@@ -1,9 +1,16 @@
 import React from 'react';
-import {ActivityIndicator} from 'react-native';
+import {View, Text, ActivityIndicator} from 'react-native';
 import {primaryColor} from '../utils/GlobalStyle';
 
-const Loading = () => {
-  return <ActivityIndicator size="large" color={primaryColor} />;
+const Loading = ({message}) => {
+  return (
+    <View>
+      <ActivityIndicator size="large" color={primaryColor} />
+      {message !== undefined && (
+        <Text style={{color: '#A5A5A5'}}>{message}</Text>
+      )}
+    </View>
+  );
 };
 
 export default Loading;

@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {View} from 'react-native';
+import {View, Text} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {getData, storeData, removeData} from './utils/LocalStorage';
 import Loading from './components/Loading';
@@ -31,7 +31,7 @@ const Index = () => {
   if (loading) {
     return (
       <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-        <Loading />
+        <Loading message="Checking session..." />
       </View>
     );
   }

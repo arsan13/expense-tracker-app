@@ -142,7 +142,7 @@ const AppStack = ({token, handleToken}) => {
   if (loading) {
     return (
       <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-        <Loading />
+        <Loading message="Fetching data..." />
       </View>
     );
   }
