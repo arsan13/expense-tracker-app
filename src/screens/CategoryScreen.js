@@ -101,6 +101,9 @@ const CategoryScreen = ({
 
   useEffect(() => {
     setData(categories);
+    return () => {
+      setData([]);
+    };
   }, [categories]);
 
   const renderItem = ({item}) => (
