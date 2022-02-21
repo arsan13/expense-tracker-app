@@ -8,7 +8,7 @@ import {windowWidth, windowHeight} from '../utils/Dimentions';
 import {
   lastNMonthsExpenses,
   monthlyExpensesOfLastYear,
-} from '../utils/HandleExpenses';
+} from '../utils/HelperFunctions';
 import {textColor} from '../utils/GlobalStyle';
 
 const chartConfig = {

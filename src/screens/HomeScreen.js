@@ -7,7 +7,7 @@ import {
   getAllTransactions,
   netExpense,
   dateFilterHelper,
-} from '../utils/HandleExpenses';
+} from '../utils/HelperFunctions';
 import Card from '../components/Card';
 import PieChart from '../components/PieChart';
 import {primaryColor} from '../utils/GlobalStyle';

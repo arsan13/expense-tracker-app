@@ -9,7 +9,7 @@ import {
   eliminateReminders,
   getAllTransactions,
   handleCategories,
-} from '../utils/HandleExpenses';
+} from '../utils/HelperFunctions';
 import ChartScreen from '../screens/ChartScreen';
 import HomeStack from './HomeStack';
 import ReminderStack from './ReminderStack';
