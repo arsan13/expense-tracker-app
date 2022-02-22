@@ -41,12 +41,13 @@ const SignupScreen = ({navigation}) => {
     delete data.confirmPassword;
 
     const res = await postService('REGISTER_API', '', data);
-    if (res !== null) {
+    if (res.token !== undefined) {
       setData(initialState);
       setIsLoading(false);
       navigation.goBack();
     } else {
-      setErrMsg('Error signing up...Try again');
+      if (res !== 'Network Error') setErrMsg('Email alreday exists.');
+      else setErrMsg('You are not connected to the internet.');
       setIsLoading(false);
     }
   };

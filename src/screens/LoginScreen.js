@@ -27,12 +27,13 @@ const LoginScreen = ({navigation, handleToken}) => {
     }
 
     const res = await postService('LOGIN_API', '', data);
-    if (res !== null) {
+    if (res.token !== undefined) {
       setData(initialState);
       setIsLoading(false);
       handleToken('Bearer '.concat(res.token));
     } else {
-      setErrMsg('Invalid Credentials');
+      if (res !== 'Network Error') setErrMsg('Invalid credentials');
+      else setErrMsg('You are not connected to the internet.');
       setIsLoading(false);
     }
   };

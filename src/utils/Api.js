@@ -52,9 +52,11 @@ const postService = async (method, token, data, id = null) => {
     });
     console.log(res.data);
     return res.data;
-  } catch (error) {
-    console.log(error);
-    return null;
+  } catch (err) {
+    if (method !== 'LOGIN_API' && method !== 'REGISTER_API') return null;
+    if (!err.response) return 'Network Error';
+    const {error} = err.response.data;
+    return {error};
   }
 };
 
