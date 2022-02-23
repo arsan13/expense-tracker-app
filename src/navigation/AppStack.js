@@ -156,6 +156,7 @@ const AppStack = ({token, handleToken}) => {
       <Drawer.Screen name="HomeStack" options={{headerShown: false}}>
         {props => (
           <HomeStack
+            reload={fetchAllCategories}
             handleToken={handleToken}
             categories={categories}
             addCategory={addCategory}

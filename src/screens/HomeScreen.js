@@ -1,5 +1,11 @@
 import React, {useState, useEffect} from 'react';
-import {FlatList, StyleSheet, View, TouchableOpacity} from 'react-native';
+import {
+  RefreshControl,
+  FlatList,
+  StyleSheet,
+  View,
+  TouchableOpacity,
+} from 'react-native';
 import {useDeviceOrientation} from '@react-native-community/hooks';
 import {Button} from 'react-native-paper';
 import DateTypeSelection from '../components/DateTypeSelection';
@@ -12,12 +18,19 @@ import Card from '../components/Card';
 import PieChart from '../components/PieChart';
 import {primaryColor} from '../utils/GlobalStyle';
 
-const HomeScreen = ({allCategories, navigation}) => {
+const HomeScreen = ({reload, allCategories, navigation}) => {
+  const [refreshing, setRefreshing] = useState(false);
   const [categories, setCategories] = useState([]);
   const [total, setTotal] = useState(0);
   const [date, setDate] = useState(new Date());
 
   const {portrait} = useDeviceOrientation();
+
+  const onRefresh = () => {
+    setRefreshing(true);
+    reload();
+    setRefreshing(false);
+  };
 
   const handleDateFilter = (type, value) => {
     if (allCategories === null) {
@@ -77,6 +90,9 @@ const HomeScreen = ({allCategories, navigation}) => {
         <FlatList
           data={categories}
           keyExtractor={item => item.id}
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          }
           renderItem={({item}) => (
             <TouchableOpacity onPress={() => handleCategoryPress(item)}>
               <Card item={item} />

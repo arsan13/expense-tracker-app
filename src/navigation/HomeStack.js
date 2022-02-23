@@ -9,6 +9,7 @@ import CategoryScreen from '../screens/CategoryScreen';
 const Stack = createNativeStackNavigator();
 
 const HomeStack = ({
+  reload,
   handleToken,
   categories,
   addCategory,
@@ -30,6 +31,7 @@ const HomeStack = ({
         }}>
         {props => (
           <HomeScreen
+            reload={reload}
             handleToken={handleToken}
             allCategories={categories}
             {...props}
