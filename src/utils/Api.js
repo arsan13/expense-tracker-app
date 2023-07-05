@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const baseUrl = 'https://my-expense-diary.herokuapp.com/';
+const baseUrl = 'https://expense-tracker-api-fm78.onrender.com/';
 
 const requests = {
   LOGIN_API: 'api/users/login/',
